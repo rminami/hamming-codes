@@ -18,6 +18,8 @@ def vis():
 def countdown():
 	return render_template('countdown.html')
 
+
+# Just leaving this as an example for when I need to do POSTs. 
 @app.route('/form', methods=['GET', 'POST'])
 def my_form():
 	if(request.method == 'GET'):
@@ -27,9 +29,6 @@ def my_form():
 		data = mangle(request.form.get('my-text'))
 		return data
 
-
-def mangle(text):
-	return text.upper()
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
