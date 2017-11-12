@@ -2,8 +2,8 @@ import unittest
 import numpy as np
 from random import randint
 
-from hamming import HammingEncoder
-from hamming import HammingChecker
+from hammingclasses import HammingEncoder
+from hammingclasses import HammingChecker
 from main import rand_array
 
 

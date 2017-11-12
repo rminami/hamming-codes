@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from hamming import HammingEncoder
-from hamming import HammingChecker
+from hammingclasses import HammingEncoder
+from hammingclasses import HammingChecker
 
 from random import randint
 import numpy as np
