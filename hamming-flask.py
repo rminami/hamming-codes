@@ -19,7 +19,8 @@ def countdown():
 	return render_template('countdown.html')
 
 
-# Just leaving this as an example for when I need to do POSTs. 
+# Just leaving this as an example
+# Won't actually be used
 @app.route('/form', methods=['GET', 'POST'])
 def my_form():
 	if(request.method == 'GET'):

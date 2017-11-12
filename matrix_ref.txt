@@ -1,0 +1,17 @@
+
+Generator matrix for size 4 should be:
+
+[[1 1 1 0 0 0 0]
+ [1 0 0 1 1 0 0]
+ [0 1 0 1 0 1 0]
+ [1 1 0 1 0 0 1]]
+
+Parity-check matrix for size 4 should be
+
+[[1 1 0]
+ [1 0 1]
+ [1 0 0]
+ [0 1 1]
+ [0 1 0]
+ [0 0 1]
+ [1 1 1]]
