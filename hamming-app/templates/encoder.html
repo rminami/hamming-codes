@@ -9,22 +9,22 @@
 {% block content %}
 <div class="uk-grid">
 	<div class="uk-width-1-3@s">
-		<form class="uk-form-stacked">
+		<form action="{{ url_for('encode') }}" method="post" class="uk-form-stacked">
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="form-input-text">Binary input</label>
+		        <label class="uk-form-label" for="word">Binary input</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-input-text" type="text" placeholder="0100011">
+		            <input class="uk-input" id="word" name="word" type="text" value="{{ word }}">
 		        </div>
 		    </div>
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="form-stacked-select">Parameter r:</label>
+		        <label class="uk-form-label" for="parameter">Parameter:</label>
 		        <div class="uk-form-controls">
-		            <select class="uk-select" id="form-stacked-select">
+		            <select class="uk-select" id="parameter" name="parameter">
 		                <option>2</option>
-		                <option>3</option>
-		                <option selected="selected">4</option>
+		                <option selected="selected">3</option>
+		                <option>4</option>
 		                <option>5</option>
 		                <option>6</option>
 		                <option>7</option>
@@ -34,16 +34,15 @@
 		    </div>
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="form-output-text">Corruption Rate</label>
+		        <label class="uk-form-label" for="error-rate">Corruption Rate</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-output-text" type="number" value="0.00" min="0.00" max="1.00" step="0.05" placeholder="p=...">
+		            <input class="uk-input" id="error-rate" name="error-rate" type="number" value="{{ error_rate }}" min="0.00" max="1.00" step="0.05" placeholder="p=...">
 		        </div>
 		    </div>
 
 		    <div class="uk-margin-large">
-		    	<button class="uk-button uk-button-default" type="button" id="submit-button" tabindex="-1">Encode</button>
-		    	<button class="uk-button uk-button-default" type="button" id="random-button" tabindex="-1">Random</button>
-
+		    	<input class="uk-button uk-button-default" type="submit" value="Encode" id="submit-button" tabindex="-1">
+                <input class="uk-button uk-button-default" type="submit" value="Random" id="random-button" tabindex="-1">
 		    </div>
 		</form>
 	</div>
@@ -53,14 +52,14 @@
 		    <div class="uk-margin">
 		        <label class="uk-form-label" for="form-output-text">Codeword</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-output-text" type="text" placeholder="Result...">
+		            <input class="uk-input" id="form-output-text" type="text" value="{{ codeword }}">
 		        </div>
 		    </div>
 
 		    <div class="uk-margin">
 		        <label class="uk-form-label" for="form-output-text">Corrupted</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-output-text" type="text" placeholder="Corrupted codeword...">
+		            <input class="uk-input" id="form-output-text" type="text" value="{{ corrupted }}">
 		        </div>
 		    </div>
 		</form>
@@ -71,18 +70,20 @@
 		    <div class="uk-margin">
 		        <label class="uk-form-label" for="form-output-text">Corrected</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-output-text" type="text" placeholder="Result...">
+		            <input class="uk-input" id="form-output-text" type="text" value="{{ corrected }}">
 		        </div>
 		    </div>
 
 		    <div class="uk-margin">
 		        <label class="uk-form-label" for="form-output-text">Success?</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-output-text" type="text" placeholder="Result...">
+		        	{% if is_success %}
+		            	<input class="uk-input uk-form-success" id="form-output-text" type="text" value="Yes">
+		        	{% else %}
+		        		<input class="uk-input uk-form-danger" id="form-output-text" type="text" value="No">
+		        	{% endif %}
 		        </div>
 		    </div>
-
-
 		</form>
 	</div>
 </div>
