@@ -56,6 +56,8 @@ def encode():
                             is_success=is_success
                         )
 
+@app.route('/random', methods=['POST'])
+
 
 @app.route('/stats')
 def stats():
