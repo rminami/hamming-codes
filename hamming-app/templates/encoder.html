@@ -19,7 +19,14 @@
 		    </div>
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="parameter">Parameter:</label>
+		        <label class="uk-form-label" for="error-rate">Corruption Rate</label>
+		        <div class="uk-form-controls">
+		            <input class="uk-input" id="error-rate" name="error-rate" type="number" value="{{ error_rate }}" min="0.00" max="1.00" step="any">
+		        </div>
+		    </div>
+
+		    <div class="uk-margin">
+		        <label class="uk-form-label" for="parameter">Hamming parameter:</label>
 		        <div class="uk-form-controls">
 		            <select class="uk-select" id="parameter" name="parameter">
 		                <option>2</option>
@@ -30,13 +37,6 @@
 		                <option>7</option>
 		                <option>8</option>
 		            </select>
-		        </div>
-		    </div>
-
-		    <div class="uk-margin">
-		        <label class="uk-form-label" for="error-rate">Corruption Rate</label>
-		        <div class="uk-form-controls">
-		            <input class="uk-input" id="error-rate" name="error-rate" type="number" value="{{ error_rate }}" min="0.00" max="1.00" step="0.05" placeholder="p=...">
 		        </div>
 		    </div>
 
@@ -60,6 +60,13 @@
 		        <label class="uk-form-label" for="form-output-text">Corrupted</label>
 		        <div class="uk-form-controls">
 		            <input class="uk-input" id="form-output-text" type="text" value="{{ corrupted }}">
+		        </div>
+		    </div>
+
+		    <div class="uk-margin">
+		    	<label class="uk-form-label" for="form-bits-corrupted">Bits corrupted</label>
+		        <div class="uk-form-controls">
+		            <input class="uk-input" id="form-output-text" type="text" value="{{ bits_corrupted }}">
 		        </div>
 		    </div>
 		</form>
