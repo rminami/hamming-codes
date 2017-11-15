@@ -46,10 +46,10 @@ class HammingEncoder(object):
 class HammingChecker(object):
     '''Reads a codeword and checks if the word bits and the parity bits match up'''
 
-    def init_checkmatrix(self, size):
+    def init_checkmatrix(self):
         '''Creates the parity-check matrix for the Hamming code, given its size'''
-        parmatrix = init_paritymatrix(size)
-        checkmatrix = np.identity(size-1, dtype=np.int)
+        parmatrix = init_paritymatrix(self.k)
+        checkmatrix = np.identity(self.k-1, dtype=np.int)
 
         # Parity bits are set as bits 1, 2, 4, 8, ... (= index 0, 1, 3, 7, ...)
         for i in range(len(parmatrix)):
@@ -57,7 +57,7 @@ class HammingChecker(object):
         return checkmatrix
 
 
-    def __init__(self, size):
+    def __init__(self, r):
         '''Constructs a Hamming parity-checker'''
         self.n = 2 ** r - 1
         self.k = self.n - r
@@ -75,16 +75,16 @@ class HammingChecker(object):
 
     def check(self, codeword):
         '''Checks if a codeword's word bits and parity bits match up'''
-        if len(codeword_arr) != len(self.checkmatrix):
+        if len(codeword) != len(self.checkmatrix):
             raise ValueError("Codeword is the wrong length.")
 
         return self.get_matching_row(np.dot(str_to_arr(codeword), self.checkmatrix) % 2)
 
 
-    def check_print(self, codeword_arr):
+    def check_print(self, codeword):
         '''Prints the relevant message for the parity-check result.'''
         try:
-            res = self.check(codeword_arr)
+            res = self.check(codeword)
             if res != -1:
                 print("Bit %d has been corrupted." % res)
             else:
@@ -100,7 +100,9 @@ class HammingChecker(object):
             if res != -1:
                 cw_arr = str_to_arr(codeword)
                 cw_arr[res] = (cw_arr[res] + 1) % 2
-            return cw_arr
+                return arr_to_str(cw_arr)
+            else:
+                return codeword
                 
         except ValueError as err:
             print(err)

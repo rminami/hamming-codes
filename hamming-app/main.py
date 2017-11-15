@@ -19,8 +19,8 @@ def main():
     encoder = HammingEncoder(size)
     checker = HammingChecker(size)
 
-    word = rand_array(size)
-    coded = encoder.encode(str_to_arr(word))
+    word = np.array([1, 0, 1, 0])
+    coded = encoder.encode(word)
 
     checker.check_print(coded)      # No bits should be corrupted yet
     # TODO bit 6 is detected as corrupted when word = [1 0 1 1]

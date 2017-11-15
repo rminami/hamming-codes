@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, url_for, abort, session
+from random import randint
 
-from hammingclasses import HammingEncoder
-from hammingclasses import HammingChecker
+from hammingclasses_v2 import HammingEncoder
+from hammingclasses_v2 import HammingChecker
 
 import helper
 
@@ -13,12 +14,14 @@ def index():
     # needs: word, error_rate, codeword, corrupted, corrected, is_success
 
     if (not session.get('inital_load')):
-        word='0110'
+        word=''
         error_rate=0.00
-        codeword='1100110'
-        corrupted='1100110'
-        corrected='1100110'
+        codeword=''
+        corrupted=''
+        corrected=''
         is_success=True
+
+    session['inital_load'] = False
 
     return render_template('encoder.html', 
                             word=word,
@@ -31,20 +34,25 @@ def index():
 
 
 @app.route('/', methods=['POST'])
-def encode():
-
-    word = request.form['word']
+def encode():    
     error_rate = request.form['error-rate']
+    parameter = int(request.form['parameter'])
 
-    parameter = request.form['parameter']
+    if request.form['submit'] == 'Encode':
+        word = request.form['word']
+    elif request.form['submit'] == 'Random':
+        # create random word
+        word = ''
+        for _ in range(2 ** parameter - parameter - 1):
+            word += str(randint(0, 1))
 
-    # Here comes the fun part
-    encoder = HammingEncoder(4) # do size stuff later
-    checker = HammingChecker(4)
+    encoder = HammingEncoder(parameter)
+    checker = HammingChecker(parameter)
 
-    codeword = helper.arr_to_str(encoder.encode(helper.str_to_arr(word)))
-    corrupted = helper.arr_to_str(helper.corrupt(helper.str_to_arr(codeword), error_rate))
-    corrected = helper.arr_to_str(checker.correct(helper.str_to_arr(corrupted)))
+    codeword = encoder.encode(word)
+    corrupted = codeword # TODO make corrupt function later
+    corrected = checker.correct(corrupted)
+
     is_success = (codeword == corrected)
 
     return render_template('encoder.html', 
@@ -56,7 +64,6 @@ def encode():
                             is_success=is_success
                         )
 
-@app.route('/random', methods=['POST'])
 
 
 @app.route('/stats')
