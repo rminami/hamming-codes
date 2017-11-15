@@ -8,6 +8,7 @@ from random import random
 # This code assumes that words and codewords are encoded as row vectors.
 # Thus, word w is encoded into codeword c with w.G and c is decoded with c.H.
 
+
 # ---- Hamming encoder class --- #
 
 class HammingEncoder(object):
@@ -23,12 +24,26 @@ class HammingEncoder(object):
             genmatrix = insert_col(genmatrix, parmatrix[:, i:i+1], 2**i-1)
         return genmatrix
 
+    # ---- Alternative version of init_genmatrix ---- #
+
+    # Replace the original version with this if this works better
+    
+    def init_genmatrix_alt(self):
+        genmatrix = np.zeros((self.k, self.n), dtype=np.int)
+        for i in range(self.n):
+            if (i + 1) != 0 and ((i & (i + 1)) == 0): # i.e. if i + 1 is a power of 2
+                for j in range(self.n):
+                    
+
+        return genmatrix
+
 
     def __init__(self, r):
         '''Constructs a Hamming encoder'''
         self.n = 2 ** r - 1
         self.k = self.n - r
         self.genmatrix = self.init_genmatrix()
+        self.genmatrix_alt = self.init_genmatrix_alt()
 
 
     def encode(self, word):
@@ -163,3 +178,10 @@ def add_noise(s, p):
             arr[i] = (arr[i] + 1) % 2
             count += 1
     return arr_to_str(arr), count
+
+
+if __name__ == '__main__':
+    encoder = HammingEncoder(3)
+    print(encoder.genmatrix)
+    print(encoder.genmatrix_alt)
+    # checker = HammingChecker(3)

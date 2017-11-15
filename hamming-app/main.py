@@ -27,8 +27,6 @@ def main():
         print("Bit " + str(i) + " has been flipped: " + coded + " -> corrects to: " + arr_to_str(checker.correct(coded)))
         coded = flip_bit(coded, i)
 
-    # checker.check_print(coded)        # Checker should detect corrupted bit
-
 def flip_bit(str, i):
     arr = str_to_arr(str)
     arr[i] = (arr[i] + 1) % 2
