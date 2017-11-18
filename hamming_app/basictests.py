@@ -33,6 +33,18 @@ class TestStringMethods(unittest.TestCase):
         self.encoder5 = HammingEncoder(5)
         self.checker5 = HammingChecker(5)
 
+        # for r = 6
+        self.encoder6 = HammingEncoder(6)
+        self.checker6 = HammingChecker(6)
+
+        # for r = 7
+        self.encoder7 = HammingEncoder(7)
+        self.checker7 = HammingChecker(7)
+
+        # for r = 8
+        self.encoder5 = HammingEncoder(8)
+        self.checker5 = HammingChecker(8)
+
 
     # ---- Verifies that tests correctly identify uncorrupted codewords ---- #
 
@@ -62,6 +74,27 @@ class TestStringMethods(unittest.TestCase):
         word = ''.join([random.choice(('0', '1')) for _ in range(26)])
         codeword = self.encoder5.encode(word)
         self.assertEqual(codeword, self.checker5.correct(codeword))
+
+
+    def test_no_corruption_6(self):
+        # r = 6, n = 57
+        word = ''.join([random.choice(('0', '1')) for _ in range(57)])
+        codeword = self.encoder6.encode(word)
+        self.assertEqual(codeword, self.checker6.correct(codeword))
+
+
+    def test_no_corruption_7(self):
+        # r = 7, n = 120
+        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
+        codeword = self.encoder7.encode(word)
+        self.assertEqual(codeword, self.checker7.correct(codeword))
+
+
+    def test_no_corruption_8(self):
+        # r = 8, n = 247
+        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
+        codeword = self.encoder8.encode(word)
+        self.assertEqual(codeword, self.checker8.correct(codeword))
 
 
     # ---- Verifies that one corrupted bit can be successfully corrected ---- #
