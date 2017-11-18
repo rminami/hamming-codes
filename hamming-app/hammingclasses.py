@@ -11,10 +11,10 @@ from random import random
 # ---- Hamming encoder class --- #
 
 class HammingEncoder(object):
-    '''Takes a source message and adds Hamming parity-check bits'''
+    """Takes a source message and adds Hamming parity-check bits"""
 
     def init_genmatrix(self):
-        '''Creates the generator matrix for the Hamming code, given its size'''
+        """Creates the generator matrix for the Hamming code, given its size"""
         parmatrix = init_paritymatrix(self.k)
         genmatrix = np.identity(self.k, dtype=np.int)
 
@@ -25,15 +25,15 @@ class HammingEncoder(object):
 
 
     def __init__(self, r):
-        '''Constructs a Hamming encoder'''
+        """Constructs a Hamming encoder"""
         self.n = 2 ** r - 1
         self.k = self.n - r
         self.genmatrix = self.init_genmatrix()
 
 
     def encode(self, word):
-        '''Constructs a codeword with parity bits given a word of an appropriate length.
-           Assumes that the input is a string of 0s and 1s'''
+        """Constructs a codeword with parity bits given a word of an appropriate length.
+           Assumes that the input is a string of 0s and 1s"""
         if len(word) != self.k:
             raise ValueError("Word must be of length " + str(self.k))
 
@@ -43,10 +43,10 @@ class HammingEncoder(object):
 # ---- Hamming encoder class --- #
 
 class HammingChecker(object):
-    '''Reads a codeword and checks if the word bits and the parity bits match up'''
+    """Reads a codeword and checks if the word bits and the parity bits match up"""
 
     def init_checkmatrix(self):
-        '''Creates the parity-check matrix for the Hamming code, given its size'''
+        """Creates the parity-check matrix for the Hamming code, given its size"""
         parmatrix = init_paritymatrix(self.k)
         checkmatrix = np.identity(self.k-1, dtype=np.int)
 
@@ -57,15 +57,15 @@ class HammingChecker(object):
 
 
     def __init__(self, r):
-        '''Constructs a Hamming parity-checker'''
+        """Constructs a Hamming parity-checker"""
         self.n = 2 ** r - 1
         self.k = self.n - r
         self.checkmatrix = self.init_checkmatrix()
 
 
     def get_matching_row(self, row):
-        '''Searches for a row in the parity-check matrix and returns its index.
-           Returns -1 if not found.'''
+        """Searches for a row in the parity-check matrix and returns its index.
+           Returns -1 if not found."""
         try:
             return np.where(np.all(self.checkmatrix == row, axis=1))[0][0]
         except IndexError:
@@ -73,7 +73,7 @@ class HammingChecker(object):
 
 
     def check(self, codeword):
-        '''Checks if a codeword's word bits and parity bits match up'''
+        """Checks if a codeword's word bits and parity bits match up"""
         if len(codeword) != len(self.checkmatrix):
             raise ValueError("Codeword is the wrong length.")
 
@@ -81,7 +81,7 @@ class HammingChecker(object):
 
 
     def check_print(self, codeword):
-        '''Prints the relevant message for the parity-check result.'''
+        """Prints the relevant message for the parity-check result."""
         try:
             res = self.check(codeword)
             if res != -1:
@@ -93,7 +93,7 @@ class HammingChecker(object):
 
 
     def correct(self, codeword):
-        '''Tries to correct the corrupted bit'''
+        """Tries to correct the corrupted bit"""
         try:
             res = self.check(codeword)
             if res != -1:
@@ -113,17 +113,17 @@ class HammingChecker(object):
 
 
 def init_paritymatrix(size):
-    '''Generates the parity-check portion of both the generator and parity-check matrices.'''
+    """Generates the parity-check portion of both the generator and parity-check matrices."""
     return ((np.fliplr(np.identity(size, dtype=np.int)) + 1) % 2)[:, 1:]
 
 
 def insert_col(mat, col, index):
-    '''Inserts a column into a matrix at the given index.'''
+    """Inserts a column into a matrix at the given index."""
     return np.hstack((mat[:, :index], col, mat[:, index:]))
 
 
 def insert_row(mat, row, index):
-    '''Inserts a row into a matrix at the given index.'''
+    """Inserts a row into a matrix at the given index."""
     return np.vstack((mat[:index, ], row, mat[index:, ]))
 
 
@@ -132,7 +132,7 @@ def insert_row(mat, row, index):
 # Converts strings to arrays and back
 
 def str_to_arr(s):
-    '''Converts a string of 0s and 1s to a numpy array'''
+    """Converts a string of 0s and 1s to a numpy array"""
     arr = np.empty(len(s), dtype=np.int)
     for i in range(len(s)):
         if s[i] == '0' or s[i] == '1':
@@ -143,7 +143,7 @@ def str_to_arr(s):
 
 
 def arr_to_str(arr):
-    '''Converts a numpy array to a string. Does not validate input value.'''
+    """Converts a numpy array to a string. Does not validate input value."""
     s = ""
     for el in arr:
         s += str(el)

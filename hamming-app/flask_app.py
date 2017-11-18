@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+
 from flask import Flask, render_template, request, url_for, abort, session
 from random import randint
+from collections import namedtuple
 
 from hammingclasses import HammingEncoder
 from hammingclasses import HammingChecker
@@ -10,16 +13,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    '''Handles the initial load only'''
-    return render_template('encoder.html', 
-                            word='',
-                            error_rate=0.00,
-                            codeword='',
-                            corrupted='',
-                            bits_corrupted=0,
-                            corrected='',
-                            is_success=True
-                        )
+    """Handles the initial load only"""
+    return render_template('encoder.html', word='', error_rate=0.00, codeword='', \
+        corrupted='', bits_corrupted=0, corrected='', is_success=True)
 
 
 @app.route('/', methods=['POST'])
