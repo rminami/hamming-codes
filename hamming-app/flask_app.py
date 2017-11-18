@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from flask import Flask, render_template, request, url_for, abort, session
-from random import randint
 from collections import namedtuple
+import random
 
 from hammingclasses import HammingEncoder
 from hammingclasses import HammingChecker
@@ -11,53 +11,51 @@ from hammingclasses import add_noise
 app = Flask(__name__)
 
 
-@app.route('/')
-def index():
-    """Handles the initial load only"""
-    return render_template('encoder.html', word='', error_rate=0.00, codeword='', \
-        corrupted='', bits_corrupted=0, corrected='', is_success=True)
+@app.route('/', methods=['GET', 'POST'])
+def encode():
 
+    if request.method == 'POST':
 
-@app.route('/', methods=['POST'])
-def encode():    
-    error_rate = float(request.form['error-rate'])
-    parameter = int(request.form['parameter'])
+        error_rate = float(request.form['error-rate'])
+        parameter = int(request.form['parameter'])
 
-    if request.form['submit'] == 'Encode':
-        word = request.form['word']
-    elif request.form['submit'] == 'Random':
-        # create random word
-        word = ''
-        for _ in range(2 ** parameter - parameter - 1):
-            word += str(randint(0, 1))
+        if request.form['submit'] == 'Encode':
+            word = request.form['word']
 
-    encoder = HammingEncoder(parameter)
-    checker = HammingChecker(parameter)
+        elif request.form['submit'] == 'Random':
+            word = ''.join([random.choice(('0', '1')) for _ in range(2 ** parameter - parameter - 1)])
 
-    codeword = encoder.encode(word)
+        encoder = HammingEncoder(parameter)
+        checker = HammingChecker(parameter)
 
-    noise_value = add_noise(codeword, error_rate)
-    corrupted = noise_value[0]
-    bits_corrupted = noise_value[1]
-    corrected = checker.correct(corrupted)
+        codeword = encoder.encode(word)
+        corrupted, bits_corrupted = add_noise(codeword, error_rate)
+        corrected = checker.correct(corrupted)
+        is_success = (codeword == corrected)
 
-    is_success = (codeword == corrected)
+        return render_template('encoder.html', word=word, error_rate=error_rate, \
+            parameter=parameter, codeword=codeword, corrupted=corrupted, \
+            bits_corrupted=bits_corrupted, corrected=corrected, is_success=is_success)
 
-    return render_template('encoder.html', 
-                            word=word,
-                            error_rate=error_rate,
-                            codeword=codeword,
-                            corrupted=corrupted,
-                            bits_corrupted=bits_corrupted,
-                            corrected=corrected,
-                            is_success=is_success
-                        )
+    elif request.method == 'GET':
+        """Handles the initial load only"""
+        return render_template('encoder.html', word='', error_rate=0.00, parameter=3, \
+            codeword='', corrupted='', bits_corrupted=0, corrected='', is_success=True)
 
 
 
 @app.route('/stats')
 def stats():
-    return render_template('stats.html')
+    StatRow = namedtuple('StatRow', ['parameter', 'length', 'data_ratio', 'theory_rate', 'test_rate'])
+    tablerows = []
+    p = 0.01 # TODO ask user for error rate
+    for r in range(2, 9):
+        n = 2 ** r - 1
+        theory_rate = (1 - p) ** n + n * p * (1 - p) ** (n - 1)
+        row = StatRow(r, n, '%.2f' % (round((2 ** r - r - 1)/(2 ** r - 1) * 100, 2)), '%.2f' % (round(theory_rate * 100, 2)), 45)
+        tablerows.append(row)
+
+    return render_template('stats.html', tablerows=tablerows)
 
 
 @app.route('/visualization')
@@ -72,3 +70,5 @@ def countdown():
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
+
+

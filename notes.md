@@ -12,3 +12,9 @@ Jean-Guillaume Dumas, Jean-Louis Roch, Éric Tannier and Sébastien Varrette.
 - Matlab has a hammgen function for generating hamming matrices.
 - Usage: [h,g,n,k] = hammgen(3)
 - https://uk.mathworks.com/help/comm/ref/hammgen.html
+
+
+# Corruption
+- Given an error rate of p,
+	- the chance of a codeword of length n not being corrupted is (1 - p)^n
+	- the change of just one bit being corrupted is n * p * (1 - p)^(n - 1)

@@ -19,23 +19,23 @@
 		    </div>
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="error-rate">Corruption Rate</label>
+		        <label class="uk-form-label" for="error-rate">Error Rate</label>
 		        <div class="uk-form-controls">
 		            <input class="uk-input" id="error-rate" name="error-rate" type="number" value="{{ error_rate }}" min="0.00" max="1.00" step="any">
 		        </div>
 		    </div>
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="parameter">Hamming parameter:</label>
+		        <label class="uk-form-label" for="parameter">Parameter r:</label>
 		        <div class="uk-form-controls">
 		            <select class="uk-select" id="parameter" name="parameter">
-		                <option>2</option>
-		                <option selected="selected">3</option>
-		                <option>4</option>
-		                <option>5</option>
-		                <option>6</option>
-		                <option>7</option>
-		                <option>8</option>
+		                <option {% if parameter == 2 %} selected="selected"{% endif %}>2</option>
+		                <option {% if parameter == 3 %} selected="selected"{% endif %}>3</option>
+		                <option {% if parameter == 4 %} selected="selected"{% endif %}>4</option>
+		                <option {% if parameter == 5 %} selected="selected"{% endif %}>5</option>
+		                <option {% if parameter == 6 %} selected="selected"{% endif %}>6</option>
+		                <option {% if parameter == 7 %} selected="selected"{% endif %}>7</option>
+		                <option {% if parameter == 8 %} selected="selected"{% endif %}>8</option>
 		            </select>
 		        </div>
 		    </div>
