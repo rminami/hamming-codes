@@ -9,7 +9,7 @@
 {% block content %}
 <h2>Test Configuration</h2>
 
-<form action="{{ stats_submit }}" method="post" class="uk-grid-small" uk-grid> 
+<form action="{{ url_for('statview') }}" method="post" class="uk-grid-small" uk-grid> 
 
     <div class="uk-width-1-3@s">
         <div class="uk-margin uk-margin-small-left">
@@ -24,7 +24,7 @@
         <div class="uk-margin-large uk-margin-left">
             <label class="uk-form-label" for="no-of-tests">Number of tests</label>
             <div class="uk-form-controls">
-                <input class="uk-input" id="no-of-tests" name="no-of-tests" type="number" value="{{ no_of_tests }}" min="0" max="1000">
+                <input class="uk-input" id="no-of-tests" name="no-of-tests" type="number" value="{{ no_of_tests }}" min="0" max="1500" step="1">
             </div>
         </div>
     </div>
@@ -54,14 +54,11 @@
         <tr>
             <td>{{ row.parameter }}</td>
             <td>{{ row.length }}</td>
-            <td>{{ row.data_ratio }}%</td>
-            <td>{{ row.theory_rate }}%</td>
-            <td>{{ row.test_rate }}%</td>
+            <td>{{ row.data_ratio }}</td>
+            <td>{{ row.theory_rate }}</td>
+            <td>{{ row.test_rate }}</td>
         </tr>
         {% endfor %}
     </tbody>
-    <caption>
-        At error rate <i>p</i> = 0.01.
-    </caption>
 </table>
 {% endblock %}
