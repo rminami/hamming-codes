@@ -42,8 +42,8 @@ class TestStringMethods(unittest.TestCase):
         self.checker7 = HammingChecker(7)
 
         # for r = 8
-        self.encoder5 = HammingEncoder(8)
-        self.checker5 = HammingChecker(8)
+        self.encoder8 = HammingEncoder(8)
+        self.checker8 = HammingChecker(8)
 
 
     # ---- Verifies that tests correctly identify uncorrupted codewords ---- #
