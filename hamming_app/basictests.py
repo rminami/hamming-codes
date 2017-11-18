@@ -42,35 +42,35 @@ class TestStringMethods(unittest.TestCase):
 
     def test_no_corruption_2(self):
         # r = 2, n = 1
-        word = ''.join([random.choice(('0', '1')) for _ in range(1)])
+        word = random_word(1)
         codeword = self.encoder2.encode(word)
         self.assertEqual(codeword, self.checker2.correct(codeword))
 
 
     def test_no_corruption_3(self):
         # r = 3, n = 4
-        word = ''.join([random.choice(('0', '1')) for _ in range(4)])
+        word = random_word(4)
         codeword = self.encoder3.encode(word)
         self.assertEqual(codeword, self.checker3.correct(codeword))
 
 
     def test_no_corruption_4(self):
         # r = 4, n = 11
-        word = ''.join([random.choice(('0', '1')) for _ in range(11)])
+        word = random_word(11)
         codeword = self.encoder4.encode(word)
         self.assertEqual(codeword, self.checker4.correct(codeword))
 
 
     def test_no_corruption_5(self):
         # r = 5, n = 26
-        word = ''.join([random.choice(('0', '1')) for _ in range(26)])
+        word = random_word(26)
         codeword = self.encoder5.encode(word)
         self.assertEqual(codeword, self.checker5.correct(codeword))
 
 
     def test_no_corruption_6(self):
         # r = 6, n = 57
-        word = ''.join([random.choice(('0', '1')) for _ in range(57)])
+        word = random_word(57)
         codeword = self.encoder6.encode(word)
         self.assertEqual(codeword, self.checker6.correct(codeword))
 
@@ -79,7 +79,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_2(self):
         # r = 2, n = 1
-        word = ''.join([random.choice(('0', '1')) for _ in range(1)])
+        word = random_word(1)
         codeword = self.encoder2.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker2.correct(corrupted))
@@ -87,7 +87,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_3(self):
         # r = 3, n = 4
-        word = ''.join([random.choice(('0', '1')) for _ in range(4)])
+        word = random_word(4)
         codeword = self.encoder3.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker3.correct(corrupted))
@@ -95,7 +95,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_4(self):
         # r = 4, n = 11
-        word = ''.join([random.choice(('0', '1')) for _ in range(11)])
+        word = random_word(11)
         codeword = self.encoder4.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker4.correct(corrupted))
@@ -103,7 +103,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_5(self):
         # r = 5, n = 26
-        word = ''.join([random.choice(('0', '1')) for _ in range(26)])
+        word = random_word(26)
         codeword = self.encoder5.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker5.correct(corrupted))
@@ -111,7 +111,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_6(self):
         # r = 6, n = 57
-        word = ''.join([random.choice(('0', '1')) for _ in range(57)])
+        word = random_word(57)
         codeword = self.encoder6.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker6.correct(corrupted))
@@ -121,7 +121,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_2(self):
         # r = 2, n = 1
-        word = ''.join([random.choice(('0', '1')) for _ in range(1)])
+        word = random_word(1)
         codeword = self.encoder2.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker2.correct(corrupted))
@@ -129,7 +129,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_3(self):
         # r = 3, n = 4
-        word = ''.join([random.choice(('0', '1')) for _ in range(4)])
+        word = random_word(4)
         codeword = self.encoder3.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker3.correct(corrupted))
@@ -137,7 +137,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_4(self):
         # r = 4, n = 11
-        word = ''.join([random.choice(('0', '1')) for _ in range(11)])
+        word = random_word(11)
         codeword = self.encoder4.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker4.correct(corrupted))
@@ -145,7 +145,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_5(self):
         # r = 5, n = 26
-        word = ''.join([random.choice(('0', '1')) for _ in range(26)])
+        word = random_word(26)
         codeword = self.encoder5.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker5.correct(corrupted))
@@ -153,13 +153,18 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_6(self):
         # r = 6, n = 57
-        word = ''.join([random.choice(('0', '1')) for _ in range(57)])
+        word = random_word(57)
         codeword = self.encoder6.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker6.correct(corrupted))
 
 
 # ---- Helper function for unit tests ---- #
+
+def random_word(len):
+    """Returns random binary word at the given length"""
+    return ''.join([random.choice(('0', '1')) for _ in range(len)])
+
 
 def corrupt_one_bit(codeword):
     """Flips a random bit in the codeword given"""

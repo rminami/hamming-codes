@@ -30,14 +30,14 @@ class TestStringMethods(unittest.TestCase):
 
     def test_no_corruption_7(self):
         # r = 7, n = 120
-        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
+        word = random_word(120)
         codeword = self.encoder7.encode(word)
         self.assertEqual(codeword, self.checker7.correct(codeword))
 
 
     def test_no_corruption_8(self):
         # r = 8, n = 247
-        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
+        word = random_word(247)
         codeword = self.encoder8.encode(word)
         self.assertEqual(codeword, self.checker8.correct(codeword))
 
@@ -46,7 +46,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_7(self):
         # r = 7, n = 120
-        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
+        word = random_word(120)
         codeword = self.encoder7.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker7.correct(corrupted))
@@ -54,7 +54,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_one_bit_8(self):
         # r = 8, n = 247
-        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
+        word = random_word(247)
         codeword = self.encoder8.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker8.correct(corrupted))
@@ -64,7 +64,7 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_7(self):
         # r = 7, n = 120
-        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
+        word = random_word(120)
         codeword = self.encoder7.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker7.correct(corrupted))
@@ -72,13 +72,18 @@ class TestStringMethods(unittest.TestCase):
 
     def test_corrupt_two_bits_8(self):
         # r = 8, n = 247
-        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
+        word = random_word(247)
         codeword = self.encoder8.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker8.correct(corrupted))
 
 
 # ---- Helper function for unit tests ---- #
+
+def random_word(len):
+    """Returns random binary word at the given length"""
+    return ''.join([random.choice(('0', '1')) for _ in range(len)])
+
 
 def corrupt_one_bit(codeword):
     """Flips a random bit in the codeword given"""
