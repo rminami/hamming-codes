@@ -2,11 +2,10 @@
 
 import unittest
 import numpy as np
-from random import randint
+import random
 
 from hammingclasses import HammingEncoder
 from hammingclasses import HammingChecker
-from main import rand_array
 
 
 # ---- Repeat decorator --- #
@@ -29,25 +28,29 @@ def repeat(times):
 class TestStringMethods(unittest.TestCase):
 
     def setUp(self):
-        self.size = 4
-        self.encoder = HammingEncoder(self.size)
-        self.checker = HammingChecker(self.size)
+        self.r = 3
+        self.k = 2 ** self.r - self.r - 1
+        self.encoder = HammingEncoder(self.r)
+        self.checker = HammingChecker(self.r)
 
     def test_no_corruption(self):
-        word = np.array([1, 0, 0, 1])
-        coded = self.encoder.encode(word)
-        self.assertEqual(self.checker.check(coded), -1)
+        for i in range(2, 7):
+            self.r = i
+            self.k = 2 ** self.r - self.r - 1
+            self.encoder = HammingEncoder(self.r)
+            self.checker = HammingChecker(self.r)
+
+            word = ''.join([random.choice(('0', '1')) for _ in range(self.k)])
+            coded = self.encoder.encode(word)
+            self.assertEqual(self.checker.check(coded), -1)
 
 
     def test_corrupt_one_bit(self):
 
-        word = np.array([1, 0, 0, 1])
+        word = ''.join([random.choice(('0', '1')) for _ in range(self.k)])
         coded = self.encoder.encode(word)
 
-        corrupted = coded.copy()
-        corrupted[4] = (corrupted[4] + 1) % 2
-
-        self.assertTrue(np.array_equal(self.checker.correct(corrupted), coded))
+        
 
 
 

@@ -25,7 +25,7 @@ def encode():
         elif request.form['submit'] == 'Random':
             word = ''.join([random.choice(('0', '1')) for _ in range(2 ** parameter - parameter - 1)])
 
-        encoder = HammingEncoder(parameter)
+        encoder = HammingEncoder(parameter) # TODO use previous one if parameter hasn't changed
         checker = HammingChecker(parameter)
 
         codeword = encoder.encode(word)
@@ -52,7 +52,7 @@ def stats():
     for r in range(2, 9):
         n = 2 ** r - 1
         theory_rate = (1 - p) ** n + n * p * (1 - p) ** (n - 1)
-        row = StatRow(r, n, '%.2f' % (round((2 ** r - r - 1)/(2 ** r - 1) * 100, 2)), '%.2f' % (round(theory_rate * 100, 2)), 45)
+        row = StatRow(r, n, '{0:.2f}'.format((n - r)/n * 100), '{0:.2f}'.format(theory_rate * 100), 45)
         tablerows.append(row)
 
     return render_template('stats.html', tablerows=tablerows)
