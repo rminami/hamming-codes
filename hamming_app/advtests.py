@@ -44,11 +44,38 @@ class TestStringMethods(unittest.TestCase):
 
     # ---- Verifies that one corrupted bit can be successfully corrected ---- #
 
+    def test_corrupt_one_bit_7(self):
+        # r = 7, n = 120
+        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
+        codeword = self.encoder7.encode(word)
+        corrupted = corrupt_one_bit(codeword)
+        self.assertEqual(codeword, self.checker7.correct(corrupted))
+
+
+    def test_corrupt_one_bit_8(self):
+        # r = 8, n = 247
+        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
+        codeword = self.encoder8.encode(word)
+        corrupted = corrupt_one_bit(codeword)
+        self.assertEqual(codeword, self.checker8.correct(corrupted))
 
 
     # ---- Verifies that correction fails when two bits are corrupted ---- #
 
+    def test_corrupt_two_bits_7(self):
+        # r = 7, n = 120
+        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
+        codeword = self.encoder7.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker7.correct(corrupted))
 
+
+    def test_corrupt_two_bits_8(self):
+        # r = 8, n = 247
+        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
+        codeword = self.encoder8.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker8.correct(corrupted))
 
 
 # ---- Helper function for unit tests ---- #
