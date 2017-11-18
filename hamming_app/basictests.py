@@ -112,6 +112,38 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(codeword, self.checker5.correct(corrupted))
 
 
+    # ---- Verifies that correction fails when two bits are corrupted ---- #
+
+    def test_corrupt_two_bits_2(self):
+        # r = 2, n = 1
+        word = ''.join([random.choice(('0', '1')) for _ in range(1)])
+        codeword = self.encoder2.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker2.correct(corrupted))
+
+    def test_corrupt_two_bits_3(self):
+        # r = 3, n = 4
+        word = ''.join([random.choice(('0', '1')) for _ in range(4)])
+        codeword = self.encoder3.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker3.correct(corrupted))
+
+
+    def test_corrupt_two_bits_4(self):
+        # r = 4, n = 11
+        word = ''.join([random.choice(('0', '1')) for _ in range(11)])
+        codeword = self.encoder4.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker4.correct(corrupted))
+
+    def test_corrupt_two_bits_5(self):
+        # r = 5, n = 26
+        word = ''.join([random.choice(('0', '1')) for _ in range(26)])
+        codeword = self.encoder5.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker5.correct(corrupted))
+
+
 # ---- Helper function for unit tests ---- #
 
 def corrupt_one_bit(codeword):
@@ -119,6 +151,19 @@ def corrupt_one_bit(codeword):
     cw_arr = str_to_arr(codeword)
     c_index = random.randint(0, len(codeword) - 1)
     cw_arr[c_index] = (cw_arr[c_index] + 1) % 2
+    return arr_to_str(cw_arr)
+
+
+def corrupt_two_bits(codeword):
+    """Flips two random bits in the codeword given"""
+    cw_arr = str_to_arr(codeword)
+
+    # procedure ensures that the same bit is not flipped twice
+    c_index1 = random.randint(0, len(codeword) - 1)
+    c_index2 = (c_index1 + random.randint(1, len(codeword) - 1)) % len(codeword)
+
+    cw_arr[c_index1] = (cw_arr[c_index1] + 1) % 2
+    cw_arr[c_index2] = (cw_arr[c_index2] + 1) % 2
     return arr_to_str(cw_arr)
 
 
