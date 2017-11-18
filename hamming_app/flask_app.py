@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request, url_for, abort, session
 from collections import namedtuple
 import random
+import time
 
 from hammingclasses import HammingEncoder
 from hammingclasses import HammingChecker
@@ -56,6 +57,9 @@ def statview():
 
 
         for r in range(2, 7):
+
+            start_time = time.time()
+
             n = 2 ** r - 1
             theory_rate = (1 - p) ** n + n * p * (1 - p) ** (n - 1)
 
@@ -79,6 +83,9 @@ def statview():
             row = StatRow(r, n, '{0:.4f}'.format((n - r)/n), '{0:.2f}%'.format(theory_rate * 100), '{0:.2f}%'.format(test_rate * 100))
             tablerows.append(row)
 
+            end_time = time.time()
+            print('r = %d took %f seconds' % (r, end_time - start_time))
+
         return render_template('stats.html', error_rate=p, no_of_tests=no_of_tests, tablerows=tablerows)
 
     elif request.method == 'GET':
@@ -89,7 +96,7 @@ def statview():
             row = StatRow(r, n, '{0:.2f}'.format((n - r)/n), '-', '-')
             tablerows.append(row)
 
-        return render_template('stats.html', error_rate=0.01, no_of_tests=500, tablerows=tablerows)
+        return render_template('stats.html', error_rate=0.01, no_of_tests=400, tablerows=tablerows)
 
 
 @app.route('/visualization')
