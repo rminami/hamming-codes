@@ -15,7 +15,7 @@ from hammingclasses import arr_to_str
 class TestStringMethods(unittest.TestCase):
 
     def setUp(self):
-        """Sets up Hamming encoders and checkers for parameters 2 to 5"""
+        """Sets up Hamming encoders and checkers for parameters 2 to 6"""
 
         # for r = 2
         self.encoder2 = HammingEncoder(2)
@@ -36,14 +36,6 @@ class TestStringMethods(unittest.TestCase):
         # for r = 6
         self.encoder6 = HammingEncoder(6)
         self.checker6 = HammingChecker(6)
-
-        # for r = 7
-        self.encoder7 = HammingEncoder(7)
-        self.checker7 = HammingChecker(7)
-
-        # for r = 8
-        self.encoder8 = HammingEncoder(8)
-        self.checker8 = HammingChecker(8)
 
 
     # ---- Verifies that tests correctly identify uncorrupted codewords ---- #
@@ -83,20 +75,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(codeword, self.checker6.correct(codeword))
 
 
-    def test_no_corruption_7(self):
-        # r = 7, n = 120
-        word = ''.join([random.choice(('0', '1')) for _ in range(120)])
-        codeword = self.encoder7.encode(word)
-        self.assertEqual(codeword, self.checker7.correct(codeword))
-
-
-    def test_no_corruption_8(self):
-        # r = 8, n = 247
-        word = ''.join([random.choice(('0', '1')) for _ in range(247)])
-        codeword = self.encoder8.encode(word)
-        self.assertEqual(codeword, self.checker8.correct(codeword))
-
-
     # ---- Verifies that one corrupted bit can be successfully corrected ---- #
 
     def test_corrupt_one_bit_2(self):
@@ -131,6 +109,14 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(codeword, self.checker5.correct(corrupted))
 
 
+    def test_corrupt_one_bit_6(self):
+        # r = 6, n = 57
+        word = ''.join([random.choice(('0', '1')) for _ in range(57)])
+        codeword = self.encoder6.encode(word)
+        corrupted = corrupt_one_bit(codeword)
+        self.assertEqual(codeword, self.checker6.correct(corrupted))
+
+
     # ---- Verifies that correction fails when two bits are corrupted ---- #
 
     def test_corrupt_two_bits_2(self):
@@ -163,6 +149,14 @@ class TestStringMethods(unittest.TestCase):
         codeword = self.encoder5.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker5.correct(corrupted))
+
+
+    def test_corrupt_two_bits_6(self):
+        # r = 6, n = 57
+        word = ''.join([random.choice(('0', '1')) for _ in range(57)])
+        codeword = self.encoder6.encode(word)
+        corrupted = corrupt_two_bits(codeword)
+        self.assertNotEqual(codeword, self.checker6.correct(corrupted))
 
 
 # ---- Helper function for unit tests ---- #
