@@ -13,14 +13,25 @@ from random import random
 class HammingEncoder(object):
     """Takes a source message and adds Hamming parity-check bits"""
 
-    def init_genmatrix(self):
+    def init_genmatrix(self, r):
         """Creates the generator matrix for the Hamming code, given its size"""
-        parmatrix = init_paritymatrix(self.k)
-        genmatrix = np.identity(self.k, dtype=np.int)
+        n = 2 ** r - 1
+        k = n - r
+        genmatrix = np.zeros((k, n), dtype=np.int)
 
-        # Parity bits are set as bits 1, 2, 4, 8, ... (= index 0, 1, 3, 7, ...)
-        for i in range(len(parmatrix)):
-            genmatrix = insert_col(genmatrix, parmatrix[:, i:i+1], 2**i-1)
+        p_set = set([2 ** i - 1 for i in range(r)])    # powers of 2 minus 1
+        d_set = set(range(n)) - p_set                  # all the other numbers
+
+        # filling in parity bit columns of the generator matrix
+        for p_item in p_set:
+            for d_index, d_item in enumerate(d_set):
+                if (p_item + 1) & (d_item + 1) != 0:
+                    genmatrix[d_index][p_item] = 1
+
+        # filling in data bit columns of the generator matrix
+        for d_index, d_item in enumerate(d_set):
+            genmatrix[d_index][d_item] = 1
+
         return genmatrix
 
 
@@ -28,7 +39,7 @@ class HammingEncoder(object):
         """Constructs a Hamming encoder"""
         self.n = 2 ** r - 1
         self.k = self.n - r
-        self.genmatrix = self.init_genmatrix()
+        self.genmatrix = self.init_genmatrix(r)
 
 
     def encode(self, word):
@@ -45,14 +56,25 @@ class HammingEncoder(object):
 class HammingChecker(object):
     """Reads a codeword and checks if the word bits and the parity bits match up"""
 
-    def init_checkmatrix(self):
+    def init_checkmatrix(self, r):
         """Creates the parity-check matrix for the Hamming code, given its size"""
-        parmatrix = init_paritymatrix(self.k)
-        checkmatrix = np.identity(self.k-1, dtype=np.int)
+        n = 2 ** r - 1
 
-        # Parity bits are set as bits 1, 2, 4, 8, ... (= index 0, 1, 3, 7, ...)
-        for i in range(len(parmatrix)):
-            checkmatrix = insert_row(checkmatrix, parmatrix[i:i+1], 2**i-1)
+        p_set = set([2 ** i - 1 for i in range(r)])    # powers of 2 minus 1
+        d_set = set(range(n)) - p_set                  # all the other numbers
+
+        checkmatrix = np.zeros((n, r), dtype=np.int)
+
+        # filling in parity bit rows of the parity check matrix
+        for d_item in d_set:
+            for index in range(r):
+                if ((d_item + 1) & 2 ** index) != 0:
+                    checkmatrix[d_item, index] = 1
+     
+        # filling in data bit rows of the parity check matrix
+        for p_index, p_item in enumerate(p_set):
+            checkmatrix[p_item][p_index] = 1  
+        
         return checkmatrix
 
 
@@ -60,7 +82,7 @@ class HammingChecker(object):
         """Constructs a Hamming parity-checker"""
         self.n = 2 ** r - 1
         self.k = self.n - r
-        self.checkmatrix = self.init_checkmatrix()
+        self.checkmatrix = self.init_checkmatrix(r)
 
 
     def get_matching_row(self, row):
@@ -110,11 +132,6 @@ class HammingChecker(object):
 # ---- Matrix utilities --- #
 
 # Various matrix operations that are needed for the Hamming encoder and checker.
-
-
-def init_paritymatrix(size):
-    """Generates the parity-check portion of both the generator and parity-check matrices."""
-    return ((np.fliplr(np.identity(size, dtype=np.int)) + 1) % 2)[:, 1:]
 
 
 def insert_col(mat, col, index):
