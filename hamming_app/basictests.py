@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import unittest
-import numpy as np
 import random
 
 from hammingclasses import HammingEncoder
@@ -11,22 +10,7 @@ from hammingclasses import str_to_arr
 from hammingclasses import arr_to_str
 
 
-# ---- Repeat decorator --- #
-
-# This decorator allows a single test to be run multiple times
-# Useful for when a random input value is generated with each test
-
-def repeat(times):
-    def repeatHelper(f):
-        def callHelper(*args):
-            for i in range(0, times):
-                f(*args)
-        return callHelper
-    return repeatHelper
-
-
 # ---- Unit test class --- #
-
 
 class TestStringMethods(unittest.TestCase):
 
@@ -89,6 +73,7 @@ class TestStringMethods(unittest.TestCase):
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker2.correct(corrupted))
 
+
     def test_corrupt_one_bit_3(self):
         # r = 3, n = 4
         word = ''.join([random.choice(('0', '1')) for _ in range(4)])
@@ -103,6 +88,7 @@ class TestStringMethods(unittest.TestCase):
         codeword = self.encoder4.encode(word)
         corrupted = corrupt_one_bit(codeword)
         self.assertEqual(codeword, self.checker4.correct(corrupted))
+
 
     def test_corrupt_one_bit_5(self):
         # r = 5, n = 26
@@ -121,6 +107,7 @@ class TestStringMethods(unittest.TestCase):
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker2.correct(corrupted))
 
+
     def test_corrupt_two_bits_3(self):
         # r = 3, n = 4
         word = ''.join([random.choice(('0', '1')) for _ in range(4)])
@@ -135,6 +122,7 @@ class TestStringMethods(unittest.TestCase):
         codeword = self.encoder4.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker4.correct(corrupted))
+
 
     def test_corrupt_two_bits_5(self):
         # r = 5, n = 26
@@ -151,6 +139,7 @@ def corrupt_one_bit(codeword):
     cw_arr = str_to_arr(codeword)
     c_index = random.randint(0, len(codeword) - 1)
     cw_arr[c_index] = (cw_arr[c_index] + 1) % 2
+
     return arr_to_str(cw_arr)
 
 
@@ -164,6 +153,7 @@ def corrupt_two_bits(codeword):
 
     cw_arr[c_index1] = (cw_arr[c_index1] + 1) % 2
     cw_arr[c_index2] = (cw_arr[c_index2] + 1) % 2
+
     return arr_to_str(cw_arr)
 
 
