@@ -3,11 +3,7 @@
 import unittest
 import random
 
-from hammingclasses import HammingEncoder
-from hammingclasses import HammingChecker
-
-from hammingclasses import str_to_arr
-from hammingclasses import arr_to_str
+from hammingclasses import HammingEncoder, HammingChecker, str_to_arr, arr_to_str
 
 
 # ---- Unit test class --- #

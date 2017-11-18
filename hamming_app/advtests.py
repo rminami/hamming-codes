@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
 import unittest
-import random
 
-from hammingclasses import HammingEncoder
-from hammingclasses import HammingChecker
-
-from hammingclasses import str_to_arr
-from hammingclasses import arr_to_str
+from hammingclasses import HammingEncoder, HammingChecker
+from basictests import random_word, corrupt_one_bit, corrupt_two_bits
 
 
 # ---- Unit test class --- #
@@ -24,6 +20,9 @@ class TestStringMethods(unittest.TestCase):
         # for r = 8
         self.encoder8 = HammingEncoder(8)
         self.checker8 = HammingChecker(8)
+
+        # set to print string of any length
+        self.maxDiff = None
 
 
     # ---- Verifies that tests correctly identify uncorrupted codewords ---- #
@@ -76,36 +75,6 @@ class TestStringMethods(unittest.TestCase):
         codeword = self.encoder8.encode(word)
         corrupted = corrupt_two_bits(codeword)
         self.assertNotEqual(codeword, self.checker8.correct(corrupted))
-
-
-# ---- Helper function for unit tests ---- #
-
-def random_word(len):
-    """Returns random binary word at the given length"""
-    return ''.join([random.choice(('0', '1')) for _ in range(len)])
-
-
-def corrupt_one_bit(codeword):
-    """Flips a random bit in the codeword given"""
-    cw_arr = str_to_arr(codeword)
-    c_index = random.randint(0, len(codeword) - 1)
-    cw_arr[c_index] = (cw_arr[c_index] + 1) % 2
-
-    return arr_to_str(cw_arr)
-
-
-def corrupt_two_bits(codeword):
-    """Flips two random bits in the codeword given"""
-    cw_arr = str_to_arr(codeword)
-
-    # procedure ensures that the same bit is not flipped twice
-    c_index1 = random.randint(0, len(codeword) - 1)
-    c_index2 = (c_index1 + random.randint(1, len(codeword) - 1)) % len(codeword)
-
-    cw_arr[c_index1] = (cw_arr[c_index1] + 1) % 2
-    cw_arr[c_index2] = (cw_arr[c_index2] + 1) % 2
-
-    return arr_to_str(cw_arr)
 
 
 if __name__ == '__main__':
