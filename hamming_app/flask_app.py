@@ -18,29 +18,49 @@ def encode():
     if request.method == 'POST':
 
         error_rate = float(request.form['error-rate'])
-        parameter = int(request.form['parameter'])
+        r = int(request.form['parameter'])
+        k = 2 ** r - r - 1
 
         if request.form['submit'] == 'Encode':
-            word = request.form['word']
+            words = request.form['words']
+            remainder = len(words) % k
+
+            if remainder != 0:
+                for _ in range(k - remainder):
+                    words += '0'
 
         elif request.form['submit'] == 'Random':
-            word = ''.join([random.choice(('0', '1')) for _ in range(2 ** parameter - parameter - 1)])
+            words = ''.join([random.choice(('0', '1')) for _ in range(k)])
 
-        encoder = HammingEncoder(parameter) # TODO use previous one if parameter hasn't changed
-        checker = HammingChecker(parameter)
+        encoder = HammingEncoder(r) # TODO use previous one if parameter hasn't changed
+        checker = HammingChecker(r)
 
-        codeword = encoder.encode(word)
-        corrupted, bits_corrupted = add_noise(codeword, error_rate)
-        corrected = checker.correct(corrupted)
-        is_success = (codeword == corrected)
+        codewords = ''
+        corrupted = ''
+        corrected = ''
+        bits_corrupted = 0
 
-        return render_template('encoder.html', word=word, error_rate=error_rate, \
-            parameter=parameter, codeword=codeword, corrupted=corrupted, \
+
+        for i in range(int(len(words) / k)):
+            word = words[i:i+k]
+            cw = encoder.encode(word)
+            cw_corrupted, cw_bits_corrupted = add_noise(cw, error_rate)
+            cw_corrected = checker.correct(cw_corrupted)
+
+            codewords += cw
+            corrupted += cw_corrupted
+            bits_corrupted += cw_bits_corrupted
+            corrected += cw_corrected
+
+        is_success = (codewords == corrected)
+
+        return render_template('encoder.html', words=words, error_rate=error_rate, \
+            parameter=r, codewords=codewords, corrupted=corrupted, \
             bits_corrupted=bits_corrupted, corrected=corrected, is_success=is_success)
 
     elif request.method == 'GET':
         """Handles the initial load only"""
-        return render_template('encoder.html', word='', error_rate=0.00, parameter=3, \
+        return render_template('encoder.html', words='', error_rate=0.00, parameter=3, \
             codeword='', corrupted='', bits_corrupted=0, corrected='', is_success=True)
 
 
@@ -55,6 +75,7 @@ def statview():
         p = float(request.form['error-rate'])
         no_of_tests = int(request.form['no-of-tests'])
 
+        start_time_all = time.time()
 
         for r in range(2, 7):
 
@@ -83,20 +104,20 @@ def statview():
             row = StatRow(r, n, '{0:.4f}'.format((n - r)/n), '{0:.2f}%'.format(theory_rate * 100), '{0:.2f}%'.format(test_rate * 100))
             tablerows.append(row)
 
-            end_time = time.time()
-            print('r = %d took %f seconds' % (r, end_time - start_time))
+            print('r = %d took %f seconds' % (r, time.time() - start_time))
+
+        print('total time %f seconds' % (time.time() - start_time_all))
 
         return render_template('stats.html', error_rate=p, no_of_tests=no_of_tests, tablerows=tablerows)
 
     elif request.method == 'GET':
         # handles the initial render only
-        p = 0.01 
         for r in range(2, 7):
             n = 2 ** r - 1
             row = StatRow(r, n, '{0:.2f}'.format((n - r)/n), '-', '-')
             tablerows.append(row)
 
-        return render_template('stats.html', error_rate=0.01, no_of_tests=400, tablerows=tablerows)
+        return render_template('stats.html', error_rate=0.01, no_of_tests=1000, tablerows=tablerows)
 
 
 @app.route('/visualization')

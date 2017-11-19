@@ -12,9 +12,9 @@
 		<form action="{{ url_for('encode') }}" method="post" class="uk-form-stacked">
 
 		    <div class="uk-margin">
-		        <label class="uk-form-label" for="word">Binary input</label>
+		        <label class="uk-form-label" for="words">Binary input</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="word" name="word" type="text" value="{{ word }}">
+		            <input class="uk-input" id="words" name="words" type="text" value="{{ words }}">
 		        </div>
 		    </div>
 
@@ -52,7 +52,7 @@
 		    <div class="uk-margin">
 		        <label class="uk-form-label" for="form-output-text">Codeword</label>
 		        <div class="uk-form-controls">
-		            <input class="uk-input" id="form-output-text" type="text" value="{{ codeword }}">
+		            <input class="uk-input" id="form-output-text" type="text" value="{{ codewords }}">
 		        </div>
 		    </div>
 
