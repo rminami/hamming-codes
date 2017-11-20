@@ -87,19 +87,18 @@ def statview():
             encoder = HammingEncoder(r)
             checker = HammingChecker(r)
 
-            no_successful = 0
+            no_of_successes = 0
 
             for _ in range(no_of_tests):
                 word = random_word(n - r)
                 codeword = encoder.encode(word)
                 corrupted, bits_corrupted = add_noise(codeword, p)
-
                 corrected = checker.correct(corrupted)
                 if codeword == corrected:
-                    no_successful += 1
+                    no_of_successes += 1
 
             theory_rate = (1 - p) ** n + n * p * (1 - p) ** (n - 1)
-            test_rate = no_successful / no_of_tests
+            test_rate = no_of_successes / no_of_tests
 
             row = StatRow(r, n, '{0:.4f}'.format((n - r)/n), '{0:.2f}%'.format(theory_rate * 100), '{0:.2f}%'.format(test_rate * 100))
             tablerows.append(row)

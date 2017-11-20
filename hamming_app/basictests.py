@@ -3,7 +3,8 @@
 import unittest
 import random
 
-from hammingclasses import HammingEncoder, HammingChecker, str_to_arr, arr_to_str
+from hammingclasses import HammingEncoder, HammingChecker, \
+    str_to_arr, arr_to_str, random_word
 
 
 # ---- Unit test class --- #

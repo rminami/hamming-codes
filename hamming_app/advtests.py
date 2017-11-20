@@ -2,8 +2,8 @@
 
 import unittest
 
-from hammingclasses import HammingEncoder, HammingChecker
-from basictests import random_word, corrupt_one_bit, corrupt_two_bits
+from hammingclasses import HammingEncoder, HammingChecker, random_word
+from basictests import corrupt_one_bit, corrupt_two_bits
 
 
 # ---- Unit test class --- #
