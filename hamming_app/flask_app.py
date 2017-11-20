@@ -26,8 +26,7 @@ def encode():
             remainder = len(words) % k
 
             if remainder != 0:
-                for _ in range(k - remainder):
-                    words += '0'
+                words += '0' * (k - remainder)
 
         elif request.form['submit'] == 'Random':
             words = ''.join([random.choice(('0', '1')) for _ in range(k)])
