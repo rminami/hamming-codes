@@ -66,6 +66,7 @@ def rawdata():
             'is_success': is_success
         }
         return jsonify(hamming_dict)
+        
     except ValueError as e:
         response = jsonify({'code': 400,'message': str(e)})
         response.status_code = 400
