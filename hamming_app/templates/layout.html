@@ -16,6 +16,7 @@
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
+    <!-- Setting script root -->
     <script type="text/javascript">
     	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
@@ -42,8 +43,6 @@
 		{% block content %}
 		{% endblock %}
 	</div>
-
-	<!-- <script type="text/javascript" src="../js/script.js"></script> -->
 
 </body>
 </html>

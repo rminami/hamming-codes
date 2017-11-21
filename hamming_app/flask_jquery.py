@@ -12,36 +12,40 @@ from hammingclasses import add_noise
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST'])
-def encode():
-
-    if request.method == 'POST':
-
-        error_rate = float(request.form['error-rate'])
-        r = int(request.form['parameter'])
-        k = 2 ** r - r - 1
-
-        if request.form['submit'] == 'Encode':
-            words = request.form['words']
-            remainder = len(words) % k
-
-            if remainder != 0:
-                words += '0' * (k - remainder)
-
-        elif request.form['submit'] == 'Random':
-            words = ''.join([random.choice(('0', '1')) for _ in range(k)])
-
-        encoder = HammingEncoder(r) # TODO use previous one if parameter hasn't changed
-        checker = HammingChecker(r)
-
-        codewords = ''
-        corrupted = ''
-        corrected = ''
-        bits_corrupted = 0
+@app.route('/')
+def index():
+    """Handles the initial load only"""
+    return render_template('jqueryencoder.html', words='', error_rate=0.00, parameter=3, \
+        codeword='', corrupted='', bits_corrupted=0, corrected='', is_success=True)
 
 
+@app.route('/_rawdata', methods=['POST'])
+def rawdata():
+    # return data as dict
+    error_rate = request.form.get('error_rate', 0, type=float)
+    r = request.form.get('parameter', 3, type=int)
+    k = 2 ** r - r - 1
+
+    if request.form.get('submit') == 'Encode':
+        words = request.form['words']
+        remainder = len(words) % k
+
+        if remainder != 0:
+            words += '0' * (k - remainder)
+
+    elif request.form.get('submit') == 'Random':
+        words = ''.join([random.choice(('0', '1')) for _ in range(k)])
+
+    encoder = HammingEncoder(r) # TODO use previous one if parameter hasn't changed
+    checker = HammingChecker(r)
+
+    codewords = ''
+    corrupted = ''
+    corrected = ''
+    bits_corrupted = 0
+    try:
         for i in range(int(len(words) / k)):
-            word = words[i:i+k]
+            word = words[i*k : (i+1)*k]
             cw = encoder.encode(word)
             cw_corrupted, cw_bits_corrupted = add_noise(cw, error_rate)
             cw_corrected = checker.correct(cw_corrupted)
@@ -53,15 +57,19 @@ def encode():
 
         is_success = (codewords == corrected)
 
-        return render_template('jqueryencoder.html', words=words, error_rate=error_rate, \
-            parameter=r, codewords=codewords, corrupted=corrupted, \
-            bits_corrupted=bits_corrupted, corrected=corrected, is_success=is_success)
-
-    elif request.method == 'GET':
-        """Handles the initial load only"""
-        return render_template('jqueryencoder.html', words='', error_rate=0.00, parameter=3, \
-            codeword='', corrupted='', bits_corrupted=0, corrected='', is_success=True)
-
+        hamming_dict = {
+            'words': words,
+            'codewords': codewords,
+            'corrupted': corrupted,
+            'bits_corrupted': bits_corrupted,
+            'corrected': corrected,
+            'is_success': is_success
+        }
+        return jsonify(hamming_dict)
+    except ValueError as e:
+        response = jsonify({'code': 400,'message': str(e)})
+        response.status_code = 400
+        return response
 
 
 @app.route('/stats', methods=['GET', 'POST'])
@@ -121,57 +129,6 @@ def statview():
 @app.route('/visualization')
 def vis():
     return render_template('visualization.html')
-
-@app.route('/_rawdata', methods=['POST'])
-def rawdata():
-    # return data as dict
-    error_rate = request.form.get('error_rate', 0, type=float)
-    r = request.form.get('parameter', 3, type=int)
-    k = 2 ** r - r - 1
-
-    print("error rate: %f, r: %d" % (error_rate, r))
-
-    print(request.form)
-
-    if request.form.get('submit') == 'Encode':
-        words = request.form['words']
-        remainder = len(words) % k
-
-        if remainder != 0:
-            words += '0' * (k - remainder)
-
-    elif request.form.get('submit') == 'Random':
-        words = ''.join([random.choice(('0', '1')) for _ in range(k)])
-
-    encoder = HammingEncoder(r) # TODO use previous one if parameter hasn't changed
-    checker = HammingChecker(r)
-
-    codewords = ''
-    corrupted = ''
-    corrected = ''
-    bits_corrupted = 0
-
-    for i in range(int(len(words) / k)):
-        word = words[i:i+k]
-        cw = encoder.encode(word)
-        cw_corrupted, cw_bits_corrupted = add_noise(cw, error_rate)
-        cw_corrected = checker.correct(cw_corrupted)
-
-        codewords += cw
-        corrupted += cw_corrupted
-        bits_corrupted += cw_bits_corrupted
-        corrected += cw_corrected
-
-    is_success = (codewords == corrected)
-
-    hamming_dict = {
-        'codewords': codewords,
-        'corrupted': corrupted,
-        'bits_corrupted': bits_corrupted,
-        'corrected': corrected,
-        'is_success': is_success
-    }
-    return jsonify(hamming_dict)
 
 
 @app.route('/countdown')
