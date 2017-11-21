@@ -15,6 +15,10 @@
     
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript">
+    	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
 </head>
 <body>
 	<nav class="uk-navbar-container uk-margin uk-dark" uk-navbar>

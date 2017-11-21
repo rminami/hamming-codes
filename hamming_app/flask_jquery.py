@@ -53,13 +53,13 @@ def encode():
 
         is_success = (codewords == corrected)
 
-        return render_template('encoder.html', words=words, error_rate=error_rate, \
+        return render_template('jqueryencoder.html', words=words, error_rate=error_rate, \
             parameter=r, codewords=codewords, corrupted=corrupted, \
             bits_corrupted=bits_corrupted, corrected=corrected, is_success=is_success)
 
     elif request.method == 'GET':
         """Handles the initial load only"""
-        return render_template('encoder.html', words='', error_rate=0.00, parameter=3, \
+        return render_template('jqueryencoder.html', words='', error_rate=0.00, parameter=3, \
             codeword='', corrupted='', bits_corrupted=0, corrected='', is_success=True)
 
 
@@ -122,21 +122,25 @@ def statview():
 def vis():
     return render_template('visualization.html')
 
-@app.route('/rawdata', methods=['POST'])
+@app.route('/_rawdata', methods=['POST'])
 def rawdata():
     # return data as dict
-    error_rate = float(request.form['error-rate'])
-    r = int(request.form['parameter'])
+    error_rate = request.form.get('error_rate', 0, type=float)
+    r = request.form.get('parameter', 3, type=int)
     k = 2 ** r - r - 1
 
-    if request.form['submit'] == 'Encode':
+    print("error rate: %f, r: %d" % (error_rate, r))
+
+    print(request.form)
+
+    if request.form.get('submit') == 'Encode':
         words = request.form['words']
         remainder = len(words) % k
 
         if remainder != 0:
             words += '0' * (k - remainder)
 
-    elif request.form['submit'] == 'Random':
+    elif request.form.get('submit') == 'Random':
         words = ''.join([random.choice(('0', '1')) for _ in range(k)])
 
     encoder = HammingEncoder(r) # TODO use previous one if parameter hasn't changed

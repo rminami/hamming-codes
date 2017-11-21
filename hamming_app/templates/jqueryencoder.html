@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% block navbar %}
+<li class="uk-active"><a href="/">Encoder</a></li>
+<li class="uk-parent"><a href="/stats">Stats</a></li>
+<li class="uk-parent"><a href="/visualization">Visualization</a></li>
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+	$(function() {
+		$('#submit-button').bind('click', function() {
+
+			console.log('button clicked');
+			$.post($SCRIPT_ROOT + '/_rawdata', {
+
+				words: $('#words').val(),
+				error_rate: $('#error-rate').val(),
+				parameter: $('#parameter').val(),
+				submit: 'Encode'
+
+			}, function(data) {
+
+				console.log(data);
+				$('#codewords').val(data.codewords);
+				$('#corrupted').val(data.corrupted);
+				$('#bits-corrupted').val(data.bits_corrupted);
+				$('#corrected').val(data.corrected);
+
+				if (data.is_success) {
+					console.log('Correction successful');
+					$('#is-success').removeClass('uk-form-danger').addClass('uk-form-success').val('Yes')
+				} else {
+					console.log('Correction failed');
+					$('#is-success').removeClass('uk-form-success').addClass('uk-form-danger').val('No')
+				}
+
+			}, "json");
+		return false;
+		});
+
+		$('#random-button').bind('click', function() {
+
+			console.log('button clicked');
+			$.post($SCRIPT_ROOT + '/_rawdata', {
+
+				words: $('#words').val(),
+				error_rate: $('#error-rate').val(),
+				parameter: $('#parameter').val(),
+				submit: 'Random'
+
+			}, function(data) {
+				$('#codewords').text(data.codewords);
+
+			}, "json");
+		return false;
+		});
+	});
+</script>
+
+<div class="uk-grid">
+	<div class="uk-width-1-3@s">
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="words">Binary input</label>
+	        <div class="uk-form-controls">
+	            <input class="uk-input" id="words" name="words" type="text" value="{{ words }}">
+	        </div>
+	    </div>
+
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="error-rate">Error Rate</label>
+	        <div class="uk-form-controls">
+	            <input class="uk-input" id="error-rate" name="error-rate" type="number" value="{{ error_rate }}" min="0.00" max="1.00" step="any">
+	        </div>
+	    </div>
+
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="parameter">Parameter r:</label>
+	        <div class="uk-form-controls">
+	            <select class="uk-select" id="parameter" name="parameter">
+	                <option {% if parameter == 2 %} selected="selected"{% endif %}>2</option>
+	                <option {% if parameter == 3 %} selected="selected"{% endif %}>3</option>
+	                <option {% if parameter == 4 %} selected="selected"{% endif %}>4</option>
+	                <option {% if parameter == 5 %} selected="selected"{% endif %}>5</option>
+	                <option {% if parameter == 6 %} selected="selected"{% endif %}>6</option>
+	                <option {% if parameter == 7 %} selected="selected"{% endif %}>7</option>
+	                <option {% if parameter == 8 %} selected="selected"{% endif %}>8</option>
+	            </select>
+	        </div>
+	    </div>
+
+	    <div class="uk-margin-large">
+	    	<input class="uk-button uk-button-default" type="submit" name="submit" value="Encode" id="submit-button">
+            <input class="uk-button uk-button-default" type="submit" name="submit" value="Random" id="random-button">
+	    </div>
+	</div>
+
+	<div class="uk-width-1-3@s">
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="codewords">Codewords</label>
+	        <div class="uk-form-controls">
+	            <input class="uk-input" id="codewords" type="text" value="{{ codewords }}">
+	        </div>
+	    </div>
+
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="corrupted">Corrupted</label>
+	        <div class="uk-form-controls">
+	            <input class="uk-input" id="corrupted" type="text" value="{{ corrupted }}">
+	        </div>
+	    </div>
+
+	    <div class="uk-margin">
+	    	<label class="uk-form-label" for="bits-corrupted">Bits corrupted</label>
+	        <div class="uk-form-controls">
+	            <input class="uk-input" id="bits-corrupted" type="text" value="{{ bits_corrupted }}">
+	        </div>
+	    </div>
+	</div>
+
+	<div class="uk-width-1-3@s">
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="corrected">Corrected</label>
+	        <div class="uk-form-controls">
+	            <input class="uk-input" id="corrected" type="text" value="{{ corrected }}">
+	        </div>
+	    </div>
+
+	    <div class="uk-margin">
+	        <label class="uk-form-label" for="is-success">Success?</label>
+	        <div class="uk-form-controls">
+            	<input class="uk-input uk-form-success" id="is-success" type="text" value="Yes">
+	        </div>
+	    </div>
+	</div>
+</div>
+{% endblock %}
