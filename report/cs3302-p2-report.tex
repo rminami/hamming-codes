@@ -85,13 +85,13 @@ The user interface includes three components: a encoder page where the user can 
 When the application is launched, the user should be greeted with a page that looks as follows.
 
 \begin{center}
-\includegraphics[width=360px]{main_blank}
+\includegraphics[width=345px]{main_blank}
 \end{center}
 
 The user should enter a word to encode, the error rate (the probability that any individual bit will be corrupted), and the parameter \textit{r}. When the encode button is pressed, the resulting codeword, the codeword after corruption, the number of bits corrupted, what the checker corrected the corrupted codeword to, and whether or not it matches up with the original codeword will be displayed. 
 
 \begin{center}
-\includegraphics[width=360px]{main_code}
+\includegraphics[width=345px]{main_code}
 \end{center}
 
 The user can then verify that any codeword that has one or fewer corrupted bits is corrected to the original codeword, whereas correction fails for any case where two or more bits are corrupted. Additionally, the random button generates a random word of length $k = 2^r - r - 1$. 
@@ -101,7 +101,7 @@ The user can then verify that any codeword that has one or fewer corrupted bits 
 The stats page allows the user to examine what the probability that the codeword will be successfully received at the other end after checks based on how reliable the transmission channel is. The user can specify what error rate is?that is, the probability that any individual bit will be corrupted?and the number of tests that they wish to conduct. The page will then display something like the following:
 
 \begin{center}
-\includegraphics[width=360px]{stats2}
+\includegraphics[width=345px]{stats2}
 \end{center}
 
 With this, the user can verify that the results of the tests approach the theoretical result as they increase the number of tests. The theoretical success rate is the probability that only 0 or 1 bits are corrupted, that is:
@@ -117,6 +117,8 @@ After seeing how well Hamming codes of various sizes perform under a given error
 \section*{Testing}
 
 Unit tests have been included in \verb!basictests.py!. The tests check Hamming encoders and checkers with parameter \textit{r} set from 2 to 6. It verifies that the Hamming checker correctly identifies a codeword which has not been corrupted, successfully corrects a codeword when only one bit has been corrupted, and fails when two bits are corrupted. 
+
+All 15 tests pass. 
 
 \end{document}  
 
