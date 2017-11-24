@@ -9,8 +9,7 @@
 {% block content %}
 <h2>Test Configuration</h2>
 
-<form action="{{ url_for('statview') }}" method="post" class="uk-grid-small" uk-grid> 
-
+<form id="statform" class="uk-grid-small" uk-grid> 
     <div class="uk-width-1-3@s">
         <div class="uk-margin uk-margin-small-left">
             <label class="uk-form-label" for="error-rate">Error Rate</label>
@@ -34,7 +33,6 @@
             <input class="uk-button uk-button-default" type="submit" value="Submit" id="submit-button" style="margin-top:24px;">
         </div>
     </div>
-
 </form>
 
 <h2>Results</h2>
@@ -51,14 +49,75 @@
     </thead>
     <tbody>
         {% for row in tablerows %}
-        <tr>
+        <tr id="row-{{ row.parameter }}" style="height: 62px;">
             <td>{{ row.parameter }}</td>
             <td>{{ row.length }}</td>
             <td>{{ row.data_ratio }}</td>
-            <td>{{ row.theory_rate }}</td>
-            <td>{{ row.test_rate }}</td>
+            <td class="theory-rate">-</td>
+            <td class="test-rate">-</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<script type="text/javascript">
+    $(function() {
+
+        $(document).ready(function() {
+            updateTable();
+        });
+
+        $('#statform').submit(function(e) {
+            e.preventDefault();
+            updateTable();
+            return false;
+        });
+
+        function updateTable() {
+
+            p = $('#error-rate').val();
+            noOfTests = $('#no-of-tests').val();
+
+            for (r = 2; r <= 6; ++r) {
+                let n = Math.pow(2, r) - 1;
+                let theoryVal = Math.pow(1-p, n) + n * p * Math.pow(1-p, n-1);
+                $('#row-' + r + ' .theory-rate').html((theoryVal * 100).toFixed(2) + '%');
+            }
+            $('.test-rate').html('<div uk-spinner></div>');
+            
+            for (r = 2; r <= 6; ++r) {
+                getValue(r, p, noOfTests);
+            }
+        }
+
+        function getValue(r, p, noOfTests) {
+
+            const start_time = new Date().getTime();
+
+            $.post($SCRIPT_ROOT + '/_statdata', {
+
+                r: r,
+                p: p,
+                no_of_tests: noOfTests
+
+            }, function(data) {
+
+                $('#row-' + r + ' .test-rate').html(data.test_rate + '%');
+
+                const request_time = new Date().getTime() - start_time;
+                console.log("Call for " + noOfTests + " tests with r=" + r + " took " + (request_time / 1000) + " seconds");
+
+            }, "json").fail(function(xhr) {
+
+                UIkit.notification({
+                    message: xhr.responseJSON.message,
+                    status: 'danger',
+                    pos: 'top-center',
+                    timeout: 4000
+                });
+                
+            });
+        }
+    });
+</script>
 {% endblock %}
