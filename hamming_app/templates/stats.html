@@ -40,7 +40,7 @@
 <table class="uk-table">
     <thead>
         <tr>
-            <th>Parameter</th>
+            <th>R</th>
             <th>Length</th>
             <th>Data Ratio</th>
             <th>Theoretical</th>
@@ -60,6 +60,9 @@
     </tbody>
 </table>
 
+<hr>
+<p>This page calculates the percentage of codewords that can be corrected based on the probability that any individual bit becomes corrupted, and tests to see how many actually can. </p>
+
 <script type="text/javascript">
     $(function() {
 
@@ -78,13 +81,19 @@
             p = $('#error-rate').val();
             noOfTests = $('#no-of-tests').val();
 
+            /* calculates theoretical success rates */
             for (r = 2; r <= 6; ++r) {
+
                 let n = Math.pow(2, r) - 1;
                 let theoryVal = Math.pow(1-p, n) + n * p * Math.pow(1-p, n-1);
+
                 $('#row-' + r + ' .theory-rate').html((theoryVal * 100).toFixed(2) + '%');
             }
+
+            /* cells display spinners until results are received from the server */
             $('.test-rate').html('<div uk-spinner></div>');
             
+            /* test results are requested asynchronously */
             for (r = 2; r <= 6; ++r) {
                 getValue(r, p, noOfTests);
             }
@@ -95,10 +104,7 @@
             const start_time = new Date().getTime();
 
             $.post($SCRIPT_ROOT + '/_statdata', {
-
-                r: r,
-                p: p,
-                no_of_tests: noOfTests
+                r: r, p: p, no_of_tests: noOfTests
 
             }, function(data) {
 
@@ -107,15 +113,6 @@
                 const request_time = new Date().getTime() - start_time;
                 console.log("Call for " + noOfTests + " tests with r=" + r + " took " + (request_time / 1000) + " seconds");
 
-            }, "json").fail(function(xhr) {
-
-                UIkit.notification({
-                    message: xhr.responseJSON.message,
-                    status: 'danger',
-                    pos: 'top-center',
-                    timeout: 4000
-                });
-                
             });
         }
     });

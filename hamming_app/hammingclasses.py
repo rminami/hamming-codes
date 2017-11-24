@@ -105,12 +105,6 @@ class HammingChecker(object):
 
         cw_arr = str_to_arr(codeword)
         res = self.get_matching_row(np.dot(cw_arr, self.checkmatrix) % 2)
-
-        # Everything seems to be working here -- problem with check matrix?
-        
-        # np.set_printoptions(threshold=np.nan)
-        # print(self.checkmatrix)
-        # print(np.dot(cw_arr, self.checkmatrix) % 2)
         
         if res != -1:
             cw_arr[res] = (cw_arr[res] + 1) % 2

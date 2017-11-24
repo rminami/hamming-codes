@@ -11,6 +11,7 @@ from hammingclasses import add_noise
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     """Handles the initial load only"""
