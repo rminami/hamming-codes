@@ -128,12 +128,7 @@ def statview():
 
 @app.route('/visualization')
 def vis():
-    return render_template('visualization.html')
-
-
-@app.route('/countdown')
-def countdown():
-    return render_template('countdown.html')
+    return render_template('zoom.html')
 
 
 # ---- Helper functions --- #

@@ -1,57 +1,37 @@
-{% extends "layout.html" %}
+{% extends 'layout.html' %}
 
 {% block navbar %}
-<li class="uk-parent"><a href="/">Encoder</a></li>
-<li class="uk-parent"><a href="/stats">Stats</a></li>
-<li class="uk-active"><a href="/visualization">Visualization</a></li>
+<li class='uk-parent'><a href='/'>Encoder</a></li>
+<li class='uk-parent'><a href='/stats'>Stats</a></li>
+<li class='uk-active'><a href='/visualization'>Visualization</a></li>
 {% endblock %}
 
 {% block content %}
-<svg width="768" height="480" style="display: block; margin: auto;"></svg>
+<svg width='768' height='480' ></svg>
+{% endblock %}
 
-<!-- <form id="statform" class="uk-grid-small" uk-grid> 
-    <div class="uk-width-1-3@s">
-        <div class="uk-margin uk-margin-small-left">
-            <label class="uk-form-label" for="error-rate">Error Rate</label>
-            <div class="uk-form-controls">
-                <input class="uk-input" id="error-rate" name="error-rate" type="number" value="{{ error_rate }}" min="0.00" max="1.00" step="any">
-            </div>
-        </div>
-    </div>
+{% block bodyjs %}
+<script src='https://d3js.org/d3.v4.min.js'></script>
 
-    <div class="uk-width-1-3@s">
-        <div class="uk-margin-large uk-margin-left">
-            <label class="uk-form-label" for="target-rate">Target success rate</label>
-            <div class="uk-form-controls">
-                <input class="uk-input" id="target-rate" name="target-rate" type="number" value="{{ target_rate }}" min="0.00" max="1.00" step="any">
-            </div>
-        </div>
-    </div>
+<script type='text/javascript'>
 
-    <div class="uk-width-1-4@s">
-        <div class="uk-margin-large uk-margin-left">
-            <input class="uk-button uk-button-default" type="submit" value="Submit" id="submit-button" style="margin-top:24px;">
-        </div>
-    </div>
-</form> -->
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-
-<script type="text/javascript">
 /* Written for D3 v4 */
+const svg = d3.select('svg');
 
-// graph = new ZoomableGraph('linegraph', {
-//     'xmin': 0, 'xmas': 1, 'ymin': 0, 'ymax': 1,
-//     'title': 'Hamming coding success rates'
-//     'xlabel': 'Error rate',
-//     'ylabel': 'Success rate'
-// });
+svg.append('circle')
+    .attr('cx', document.body.clientWidth / 2)
+    .attr('cy', document.body.clientHeight / 2)
+    .attr('r', 50)
+    .style('fill', '#B8DEE6')
 
-const svg = d3.select('svg'),
-    margin = { top: 40, bottom: 70, left: 65, right: 0 },
+const margin = { top: 40, bottom: 70, left: 65, right: 0 },
     width = +svg.attr('width') - margin.left - margin.right,
     height = +svg.attr('height') - margin.top - margin.bottom,
-    g = svg.append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+    g = svg.call(d3.zoom().on('zoom', function() {
+        svg.attr('transform', d3.event.transform)
+    }))
+    .append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 
 /* scales for x, y, z axis */
 let scaleX = d3.scaleLinear().rangeRound([0, width]),
@@ -131,33 +111,37 @@ d3.csv('{{ url_for("static", filename="data3.csv")}}', function(error, data) {
         .attr('stroke-linecap', 'round')
         .attr('stroke-width', 2);
 
-    /* defining zoom behavior */
-    let zoom = d3.zoom()
-        .scaleX(x)
-        .scaleY(y)
-        .scaleExtent([1, 10])
-        .on('zoom', function() {
-            svg.attr('transform', d3.event.transform);
-        });
+    // /* defining zoom behavior */
+    // let zoom = d3.zoom()
+    //     .scaleX(x)
+    //     .scaleY(y)
+    //     .scaleExtent([1, 10])
+    //     .on('zoom', function() {
+    //         svg.select('.axis--x').call(xAxis);
+    //         svg.select('.axis--y').call(yAxis);
+    //         svg.selectAll('.line').attr('d', line);
+
+    //         svg.attr('transform', d3.event.transform);
+    //     });
 
     /* legend */
-    var legend = svg.selectAll(".legend")
+    var legend = svg.selectAll('.legend')
         .data(rHeader)
         .enter()
-        .append("g")
-        .attr("class", "lineLegend")
-        .attr("transform", function(d, i) {
-            return "translate(" + (margin.left + width - 40) + "," + (margin.top + 15 + i * 20) + ")";
+        .append('g')
+        .attr('class', 'lineLegend')
+        .attr('transform', function(d, i) {
+            return 'translate(' + (margin.left + width - 40) + ',' + (margin.top + 15 + i * 20) + ')';
         });
 
-    legend.append("text")
+    legend.append('text')
         .text(function(d) { return d; })
         .style('font-size', '14px')
-        .attr("transform", "translate(15,9)"); //align texts with boxes
+        .attr('transform', 'translate(15,9)'); //align texts with boxes
 
-    legend.append("rect")
-        .attr("fill", function(d, i) { return scaleZ(d); })
-        .attr("width", 10).attr("height", 10);
+    legend.append('rect')
+        .attr('fill', function(d, i) { return scaleZ(d); })
+        .attr('width', 10).attr('height', 10);
 });
 </script>
 {% endblock %}
