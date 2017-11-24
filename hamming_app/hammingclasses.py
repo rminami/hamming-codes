@@ -124,7 +124,7 @@ class HammingChecker(object):
 def str_to_arr(s):
     """Converts binary string to numpy array"""
     if not re.fullmatch(r'(0|1)*', s):
-        raise ValueError('Please enter binary.')
+        raise ValueError('Input must be in binary.')
     return np.array([int(d) for d in s], dtype=np.uint)
 
 

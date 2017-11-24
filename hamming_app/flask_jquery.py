@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, url_for, abort, session, jsonify
+from flask import Flask, render_template, request, url_for, session, jsonify
 from collections import namedtuple
 import random
 import time
@@ -11,44 +11,52 @@ from hammingclasses import add_noise
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
     """Handles the initial load only"""
+    app.r = 3
+    app.encoder = HammingEncoder(3)
+    app.checker = HammingChecker(3)
+
     return render_template('jqueryencoder.html', words='', error_rate=0.00, parameter=3, \
         codeword='', corrupted='', bits_corrupted=0, corrected='', is_success=True)
 
 
 @app.route('/_rawdata', methods=['POST'])
 def rawdata():
-    # return data as dict
-    error_rate = request.form.get('error_rate', 0, type=float)
-    r = request.form.get('parameter', 3, type=int)
-    k = 2 ** r - r - 1
-
-    if request.form.get('submit') == 'Encode':
-        words = request.form['words']
-        remainder = len(words) % k
-
-        if remainder != 0:
-            words += '0' * (k - remainder)
-
-    elif request.form.get('submit') == 'Random':
-        words = ''.join([random.choice(('0', '1')) for _ in range(k)])
-
-    encoder = HammingEncoder(r) # TODO use previous one if parameter hasn't changed
-    checker = HammingChecker(r)
-
-    codewords = ''
-    corrupted = ''
-    corrected = ''
-    bits_corrupted = 0
     try:
+        error_rate = request.form.get('error_rate', type=float)
+
+        if error_rate < 0 or error_rate > 1:
+            raise ValueError("Error rate must be between 0 and 1.")
+
+        r = request.form.get('parameter', type=int)
+        k = 2 ** r - r - 1
+
+        if request.form.get('submit') == 'Encode':
+            words = request.form['words']
+
+            if len(words) % k != 0:
+                words += '0' * (k - (len(words) % k)) # adds padding
+
+        elif request.form.get('submit') == 'Random':
+            words = ''.join([random.choice(('0', '1')) for _ in range(k)]) 
+
+        if r != app.r:
+            app.r = r
+            app.encoder = HammingEncoder(r)
+            app.checker = HammingChecker(r)
+
+        codewords = ''
+        corrupted = ''
+        corrected = ''
+        bits_corrupted = 0
+
         for i in range(int(len(words) / k)):
             word = words[i*k : (i+1)*k]
-            cw = encoder.encode(word)
+            cw = app.encoder.encode(word)
             cw_corrupted, cw_bits_corrupted = add_noise(cw, error_rate)
-            cw_corrected = checker.correct(cw_corrupted)
+            cw_corrected = app.checker.correct(cw_corrupted)
 
             codewords += cw
             corrupted += cw_corrupted
@@ -57,7 +65,7 @@ def rawdata():
 
         is_success = (codewords == corrected)
 
-        hamming_dict = {
+        hamming_data = {
             'words': words,
             'codewords': codewords,
             'corrupted': corrupted,
@@ -65,7 +73,7 @@ def rawdata():
             'corrected': corrected,
             'is_success': is_success
         }
-        return jsonify(hamming_dict)
+        return jsonify(hamming_data)
         
     except ValueError as e:
         response = jsonify({'code': 400,'message': str(e)})
@@ -142,6 +150,7 @@ def random_word(len):
 
 
 if __name__ == "__main__":
-    app.run(port=8080, debug=True)
+    with app.app_context():
+        app.run(port=8080, debug=True)
 
 
