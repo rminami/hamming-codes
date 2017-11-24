@@ -106,7 +106,7 @@ d3.csv('{{ url_for("static", filename="data3.csv")}}', function(error, data) {
         .attr('x', 0 - (height / 2))
         .attr('dy', '1em')
         .style('text-anchor', 'middle')
-        .text('Successfully transmitted codewords');
+        .text('Success rate');
 
     let rLine = g.selectAll('.rLine')
     	.data(rValues)
