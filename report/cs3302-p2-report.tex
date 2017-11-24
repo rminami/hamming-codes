@@ -39,7 +39,7 @@ The objective of this practical was to implement Hamming codes and allow the use
 
 This application requires Python 3 (tested on version 3.6.3). Additional dependencies can be installed using
 
-\begin{Verbatim}[tabsize=4]
+\begin{Verbatim}[tabsize=4]brew 
 	$ pip3 install -r requirements.txt
 \end{Verbatim}
 
@@ -57,15 +57,19 @@ Once the application is running, the main window should be accessible on any bro
 
 This application was written as a Python web application that delivered though Flask. The code for serving the pages is contained within \verb!flask_app.py!, and the classes for the Hamming encoder and checker are included in \verb!hammingclasses.py!. 
 
-Instances of the class \verb|HammingEncoder| takes in a word and returns a codeword with the original bits in the word with parity bits attached. The constructor takes in the parameter \textit{r} as its argument and generates a Hamming encoder with a generator matrix. 
+Instances of the class \verb|HammingEncoder| takes in a word and returns a codeword with the original bits in the word with parity bits attached. The constructor takes in the parameter \textit{r} as its argument and generates a Hamming encoder with a generator matrix.
 
-The generator matrix is configured so that the parity bits are as follows:
+The generator matrix is configured so that the parity bits are as follows: if $b_i$ stands for the bit at position $i$ (that is, index $i-1$), the parity bits are 
 
 \begin{align*}
-D &= \{\,i \mid \exists \, j \in \mathbb{N} \text{ such that } 2^j = i \ \& \ i < n \, \} &\\
-P &= \{\,i \mid 1 \leq i \leq n \ \& \  i \notin D \}
+P &= \{\,b_i \mid \exists \, j \in \mathbb{N} \text{ such that } 2^j = i \ \& \ i < n \, \} &\\
 \end{align*}
 
+where $P$ is the set of all parity bits. The bit is the xor of all bits for which a bitwise AND is nonzero, that is,
+
+\begin{align*}
+\text{for all}\ b_i \in P&= \{\,b_i \mid \exists \, j \in \mathbb{N} \text{ such that } 2^j = i \ \& \ i < n \, \} &\\
+\end{align*}
 
 \section*{Testing}
 
