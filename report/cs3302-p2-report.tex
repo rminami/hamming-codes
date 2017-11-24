@@ -39,7 +39,7 @@ The objective of this practical was to implement Hamming codes and allow the use
 
 This application requires Python 3 (tested on version 3.6.3). Additional dependencies can be installed using
 
-\begin{Verbatim}[tabsize=4]brew 
+\begin{Verbatim}[tabsize=4]
 	$ pip3 install -r requirements.txt
 \end{Verbatim}
 
@@ -51,25 +51,38 @@ After all dependencies have been set up, the application can be launched with:
 \end{Verbatim}
 
 Once the application is running, the main window should be accessible on any browser at http://127.0.0.1:8080. 
-%\includegraphics[width=\textwidth]{main_blank}
 
 \section*{Design}
 
-This application was written as a Python web application that delivered though Flask. The code for serving the pages is contained within \verb!flask_app.py!, and the classes for the Hamming encoder and checker are included in \verb!hammingclasses.py!. 
+This application was written as a Python web application that delivered though Flask. The code for the Hamming encoder and checker are included in \verb!hammingclasses.py!, which the user can interact with through the pages served by \verb!flask_app.py!
+
+\subsection*{Hamming encoder and checker}
 
 Instances of the class \verb|HammingEncoder| takes in a word and returns a codeword with the original bits in the word with parity bits attached. The constructor takes in the parameter \textit{r} as its argument and generates a Hamming encoder with a generator matrix.
 
-The generator matrix is configured so that the parity bits are as follows: if $b_i$ stands for the bit at position $i$ (that is, index $i-1$), the parity bits are 
+The generator matrix is configured to place the parity-check bits at positions which are powers of 2. In other words, if $b_i$ stands for the bit at position $i$ (index $i-1$) and the set of all parity-bits is $P$, 
 
-\begin{align*}
-P &= \{\,b_i \mid \exists \, j \in \mathbb{N} \text{ such that } 2^j = i \ \& \ i < n \, \} &\\
-\end{align*}
+$$
+P = \{\,b_i \mid \exists \, k \in \mathbb{N} \text{ such that } 2^k = i \ \& \ i < n \, \}
+$$
 
-where $P$ is the set of all parity bits. The bit is the xor of all bits for which a bitwise AND is nonzero, that is,
+Bit $b_i$ is an even parity-check bit on every data bit $b_j$ where $b_i \odot b_j \neq 0$; that is, 
 
-\begin{align*}
-\text{for all}\ b_i \in P&= \{\,b_i \mid \exists \, j \in \mathbb{N} \text{ such that } 2^j = i \ \& \ i < n \, \} &\\
-\end{align*}
+$$
+b_i = \bigoplus_{j}b_j \text{ for } \{\,b_j \mid b_i \odot b_j \neq 0\} 
+$$
+
+With this matrix, constructing codewords for each word becomes a matter of simply multiplying the word by the generator matrix. Since every number between 1 and n is uniquely represented in binary, it is also uniquely represented by a set of parity-check bits. Thus, this method allows us to construct generator matrix for Hamming codes of any parameter \textit{r} where any one corrupted bit would be identified.
+
+The class \verb!HammingChecker! also takes in \textit{r} as the parameter, and constructs a checker matrix using the same algorithm. Codewords are checked by multiplication with the checker matrix. If the resulting vector matches up with any row in the checker matrix, the bit of that row has been corrupted. If the resulting vector is a zero vector, no corruption has taken place. 
+
+\subsection*{User interface}
+
+\subsubsection*{Hamming encoding page}
+
+When the application is launched, the user should be greeted with a page that looks like the following. The user should enter a word to encode, the error rate (the probability that any individual bit will be corrupted), and the parameter \textit{r}. 
+
+\includegraphics[width=\textwidth]{main_blank}
 
 \section*{Testing}
 
