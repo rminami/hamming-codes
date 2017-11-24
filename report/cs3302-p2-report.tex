@@ -78,11 +78,27 @@ The class \verb!HammingChecker! also takes in \textit{r} as the parameter, and c
 
 \subsection*{User interface}
 
+The user interface includes three components: a encoder page where the user can test the Hamming encoder and checker, a statistics page where the user can view statistics on the success rates of Hamming codes under various conditions, and a visualization page that shows related information as graphs.
+
 \subsubsection*{Hamming encoding page}
 
-When the application is launched, the user should be greeted with a page that looks like the following. The user should enter a word to encode, the error rate (the probability that any individual bit will be corrupted), and the parameter \textit{r}. 
+When the application is launched, the user should be greeted with a page that looks as follows.
 
-\includegraphics[width=\textwidth]{main_blank}
+\begin{center}
+\includegraphics[height=220px]{main_blank}
+\end{center}
+
+The user should enter a word to encode, the error rate (the probability that any individual bit will be corrupted), and the parameter \textit{r}. When the encode button is pressed, the resulting codeword, the codeword after corruption, the number of bits corrupted, what the checker corrected the corrupted codeword to, and whether or not it matches up with the original codeword will be displayed. 
+
+\begin{center}
+\includegraphics[height=220px]{main_code}
+\end{center}
+
+The user can then verify that any codeword that has one or fewer corrupted bits is corrected to the original codeword, whereas correction fails for any case where two or more bits are corrupted. Additionally, the random button generates a random word of length $k = 2^r - r - 1$. 
+
+\subsubsection*{Statistics page}
+
+The stats page allows the user to examine what the probability that the codeword will be successfully received at the other end after checks based on how reliable the transmission channel is. The user can specify what error rate is?that is, the probability that any individual bit will be corrupted
 
 \section*{Testing}
 
