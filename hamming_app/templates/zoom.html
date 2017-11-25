@@ -18,20 +18,9 @@
 /* Written for D3 v4 */
 const svg = d3.select('svg');
 
-svg.append('circle')
-    .attr('cx', document.body.clientWidth / 2)
-    .attr('cy', document.body.clientHeight / 2)
-    .attr('r', 50)
-    .style('fill', '#B8DEE6')
-
 const margin = { top: 40, bottom: 70, left: 65, right: 0 },
     width = +svg.attr('width') - margin.left - margin.right,
-    height = +svg.attr('height') - margin.top - margin.bottom,
-
-    g = svg.call(d3.zoom().on('zoom', function() {
-        svg.attr('transform', d3.event.transform)
-    }))
-    .append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+    height = +svg.attr('height') - margin.top - margin.bottom;
 
 /* scales for x, y, z axis */
 let scaleX = d3.scaleLinear().rangeRound([0, width]),
@@ -44,7 +33,18 @@ let line = d3.line()
     .x(d => scaleX(d.p))
     .y(d => scaleY(d.res));
 
-d3.csv('{{ url_for("static", filename="data3.csv")}}', function(error, data) {
+
+let g = svg.call(d3.zoom()
+    .x(scaleX)
+    .y(scaleY)
+    .scaleExtent([1, 10])
+    .on('zoom', function() {
+        svg.attr('transform', d3.event.transform)
+    }))
+    .append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+
+d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
 
     if (error) throw error;
 
@@ -72,7 +72,7 @@ d3.csv('{{ url_for("static", filename="data3.csv")}}', function(error, data) {
     /* x-axis */
     let xAxis = g.append('g')
         .attr('class', 'axis axis--x')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', 'translate(0,' + height + ')')    
         .call(d3.axisBottom(scaleX));
 
     /* label for x-axis */
@@ -142,6 +142,10 @@ d3.csv('{{ url_for("static", filename="data3.csv")}}', function(error, data) {
     legend.append('rect')
         .attr('fill', function(d, i) { return scaleZ(d); })
         .attr('width', 10).attr('height', 10);
+
+    function zoomfunc() {
+
+    }
 });
 </script>
 {% endblock %}

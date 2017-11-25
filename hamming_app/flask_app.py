@@ -128,7 +128,7 @@ def statview():
 
 @app.route('/visualization')
 def vis():
-    return render_template('zoom.html')
+    return render_template('visualization.html')
 
 
 # ---- Helper functions --- #

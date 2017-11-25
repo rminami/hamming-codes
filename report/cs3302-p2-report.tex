@@ -2,11 +2,11 @@
 \usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
 \geometry{a4paper}
 \usepackage[parfill]{parskip}    			% Activate to begin paragraphs with an empty line rather than an indent
-%\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \graphicspath{ {images/} }
+\usepackage{wrapfig}
 
 % For adding the headers
 \usepackage{fancyhdr}
@@ -18,8 +18,6 @@
     \rhead{November 24, 2017}
     \rfoot{\thepage}
 
-%\begin{verbatim}
-%\end{verbatim}	
 \usepackage{fancyvrb}
 
 \usepackage{tikz}
@@ -88,6 +86,7 @@ When the application is launched, the user should be greeted with a page that lo
 \includegraphics[width=345px]{main_blank}
 \end{center}
 
+
 The user should enter a word to encode, the error rate (the probability that any individual bit will be corrupted), and the parameter \textit{r}. When the encode button is pressed, the resulting codeword, the codeword after corruption, the number of bits corrupted, what the checker corrected the corrupted codeword to, and whether or not it matches up with the original codeword will be displayed. 
 
 \begin{center}
@@ -114,12 +113,30 @@ After seeing how well Hamming codes of various sizes perform under a given error
 
 \subsubsection*{Visualization page}
 
+The visualization page shows a line graph of the probability of a codeword being transmitted after Hamming checks given an error rate of p. Each of the lines corresponds to a different parameter for r. 
+
+\begin{center}
+\includegraphics[width=345px]{vis1}
+\end{center}
+
+This visualization make it clear that although all variations of Hamming encoding transmit 100\% of their information at $p=0$ and converge to 0\% as $p$ approaches 1, the larger Hamming codes quickly become unworkable at fairly low $p$ values. 
+
 \section*{Testing}
 
-Unit tests have been included in \verb!basictests.py!. The tests check Hamming encoders and checkers with parameter \textit{r} set from 2 to 6. It verifies that the Hamming checker correctly identifies a codeword which has not been corrupted, successfully corrects a codeword when only one bit has been corrupted, and fails when two bits are corrupted. 
+Unit tests have been included in \verb!basictests.py!. The tests check Hamming encoders and checkers with parameter \textit{r} set from 2 to 6. It verifies that the Hamming checker correctly identifies a codeword which has not been corrupted, successfully corrects a codeword when only one bit has been corrupted, and fails when two bits are corrupted. All 15 tests pass successfully. 
 
-All 15 tests pass. 
+\section*{Analysis}
 
+
+\begin{wrapfigure}{r}{6cm}
+\vspace*{-1.3cm}
+\centering
+\includegraphics[width=0.48\textwidth]{figure2}
+\end{wrapfigure}
+
+As the reliability of Hamming codes can be calculated using the theoretical value, there is no need to test for each value of \textit{n} and \textit{r}. After analyzing the theoretical value, we can see that for example, in order for 99.99\% of codewords to be transmitted correctly, \textit{p} must be around 0.00578 or less with r=2, and 0.00219 or less with r=3.
+
+Similar calculations can be made for any p. 
 \end{document}  
 
 
