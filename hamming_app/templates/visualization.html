@@ -75,7 +75,7 @@ d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
     	.attr('class', 'axis axis--y')
     	.call(d3.axisLeft(scaleY));
 
-    /* label for x-axis */
+    /* label for y-axis */
     g.append('text')
 	    .attr('class', 'axis-label axis-label--y')
         .attr('transform', 'rotate(-90)')
