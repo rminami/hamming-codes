@@ -11,8 +11,8 @@ This application was written for CS3302 Data Encoding at the University of St An
 To run the application locally on your machine, first download it with 
 
 ```
-$ git clone https://github.com/ryosukeminami/Hamming-Code-App.git
-$ cd Hamming-Code-App/
+$ git clone https://github.com/ryosukeminami/hamming-code-app.git
+$ cd hamming-code-app/
 ```
 
 It is recommended that you set up a virtual environment for this application. After making sure [virtualenv](https://virtualenv.pypa.io/) is installed, run
