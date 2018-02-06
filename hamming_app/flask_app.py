@@ -143,5 +143,3 @@ def random_word(len):
 if __name__ == "__main__":
     with app.app_context():
         app.run(port=8080, debug=True)
-
-
