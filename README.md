@@ -44,4 +44,4 @@ The stats window shows how the metrics change with different values of r. As r g
 
 ## License
 
-MIT License (c) 2017 Ryosuke Minami. Details are in the [`LICENSE`](./LICENSE) file.
+MIT License (c) 2017 Ryosuke Minami. See the [`LICENSE`](./LICENSE) file for details.
