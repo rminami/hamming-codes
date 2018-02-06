@@ -1,10 +1,10 @@
 # Hamming Code Web App
 
-This is an implementation of Hamming codes using Python and NumPy, packaged into a web application with Flask. 
+An implementation of Hamming codes using Python and NumPy, packaged into a web application with Flask. 
 
 ![encoder screenshot](images/encoder-screen.png)
 
-It is available online at <https://rminami.pythonanywhere.com/> (if I haven't forgotten to keep it online).
+This application was written for CS3302 Data Encoding at the University of St Andrews (2017). Available online at <https://rminami.pythonanywhere.com/> (if I haven't forgotten to keep it online).
 
 ## Installation
 
@@ -44,4 +44,4 @@ The stats window shows how the metrics change with different values of r. As r g
 
 ## License
 
-MIT License (c) 2017 Ryosuke Minami. Details available in the [`LICENSE`](./LICENSE) file.
+MIT License (c) 2017 Ryosuke Minami. Details are in the [`LICENSE`](./LICENSE) file.
