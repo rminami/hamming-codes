@@ -66,8 +66,6 @@ def rawdata():
 
         is_success = (codewords == corrected)
 
-        # TOOD (possibly) analyze how many *data* bits were corrupted after correction
-
         hamming_data = {
             'words': words,
             'codewords': codewords,
@@ -126,11 +124,6 @@ def statview():
     return render_template('stats.html', error_rate=0.01, no_of_tests=1000, tablerows=tablerows)
 
 
-@app.route('/visualization')
-def vis():
-    return render_template('visualization.html')
-
-
 # ---- Helper functions --- #
 
 def random_word(len):
@@ -142,4 +135,4 @@ def random_word(len):
 
 if __name__ == "__main__":
     with app.app_context():
-        app.run(port=8080, debug=True)
+        app.run(port=8080)
