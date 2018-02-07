@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, url_for, session, jsonify, current_app
+from flask import Flask, render_template, request, session, jsonify, current_app
 from collections import namedtuple
 import random
-import time
 
 from hammingclasses import HammingEncoder
 from hammingclasses import HammingChecker
