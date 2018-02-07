@@ -28,9 +28,9 @@ let scaleX = d3.scaleLinear().rangeRound([0, width]),
     scaleZ = d3.scaleOrdinal(d3.schemeCategory10);
 
 let line = d3.line()
-	.curve(d3.curveBasis)
-	.x(d => scaleX(d.p))
-	.y(d => scaleY(d.res));
+    .curve(d3.curveBasis)
+    .x(d => scaleX(d.p))
+    .y(d => scaleY(d.res));
 
 d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
 
@@ -38,46 +38,46 @@ d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
 
     let rHeader = data.columns.slice(1);
     let rValues = rHeader.map(function(id) {
-    	return {
-    		id: id,
-    		values: data.map(function(d) {
-    			return {
-    				p: d.p, 
-    				res: d[id]
-    			};
-    		})
-    	};
+        return {
+            id: id,
+            values: data.map(function(d) {
+                return {
+                    p: d.p, 
+                    res: d[id]
+                };
+            })
+        };
     });
 
     scaleX.domain(d3.extent(data, d => d.p));
     scaleY.domain([
         d3.min(rValues, c => d3.min(c.values, d => d.res)),
-    	d3.max(rValues, c => d3.max(c.values, d => d.res))
+        d3.max(rValues, c => d3.max(c.values, d => d.res))
     ]);
 
     scaleZ.domain(rValues.map(c => c.id));
 
     /* x-axis */
     g.append('g')
-    	.attr('class', 'axis axis--x')
-    	.attr('transform', 'translate(0,' + height + ')')
-    	.call(d3.axisBottom(scaleX));
+        .attr('class', 'axis axis--x')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(d3.axisBottom(scaleX));
 
     /* label for x-axis */
     g.append('text')
-	    .attr('class', 'axis-label axis-label--x')
+        .attr('class', 'axis-label axis-label--x')
         .attr('transform', 'translate(' + (width / 2) + ',' + (height + margin.top + 15) + ')')
         .style('text-anchor', 'middle')
         .text('Error rate');
 
-   	/* y-axis */
+    /* y-axis */
     g.append('g')
-    	.attr('class', 'axis axis--y')
-    	.call(d3.axisLeft(scaleY));
+        .attr('class', 'axis axis--y')
+        .call(d3.axisLeft(scaleY));
 
     /* label for y-axis */
     g.append('text')
-	    .attr('class', 'axis-label axis-label--y')
+        .attr('class', 'axis-label axis-label--y')
         .attr('transform', 'rotate(-90)')
         .attr('y', 0 - margin.left)
         .attr('x', 0 - (height / 2))
@@ -86,14 +86,14 @@ d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
         .text('Success rate');
 
     let rLine = g.selectAll('.rLine')
-    	.data(rValues)
-    	.enter().append('g')
-    		.attr('class', 'rLine');
+        .data(rValues)
+        .enter().append('g')
+            .attr('class', 'rLine');
 
     rLine.append('path')
-    	.attr('class', 'line')
-    	.attr('d', d => line(d.values))
-    	.style('stroke', d => scaleZ(d.id))
+        .attr('class', 'line')
+        .attr('d', d => line(d.values))
+        .style('stroke', d => scaleZ(d.id))
         .attr('fill', 'none')
         .attr('stroke-linejoin', 'round')
         .attr('stroke-linecap', 'round')
@@ -101,7 +101,7 @@ d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
 
     /* legend */
     var legend = svg.selectAll(".legend")
-    	.data(rHeader)
+        .data(rHeader)
         .enter()
         .append("g")
         .attr("class", "lineLegend")
@@ -110,8 +110,8 @@ d3.csv('{{ url_for("static", filename="data.csv")}}', function(error, data) {
         });
 
     legend.append("text")
-    	.text(function(d) { return d; })
-    	.style('font-size', '14px')
+        .text(function(d) { return d; })
+        .style('font-size', '14px')
         .attr("transform", "translate(15,9)"); //align texts with boxes
 
     legend.append("rect")

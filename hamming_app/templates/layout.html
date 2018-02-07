@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 
 <head>
-	<title>Hamming Encoder</title>
-	<meta charset="utf-8">
+    <title>Hamming Encoder</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="static/favicon.ico?v=2">
 
     <!-- UIkit CSS -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.34/css/uikit.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.34/css/uikit.min.css" />
 
-	<!-- UIkit JS -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.34/js/uikit.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.34/js/uikit-icons.min.js"></script>
+    <!-- UIkit JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.34/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.34/js/uikit-icons.min.js"></script>
     
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
     <!-- Setting script root -->
     <script type="text/javascript">
-    	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
 </head>
 <body>
-	<nav class="uk-navbar-container uk-margin uk-dark" uk-navbar>
-	    <div class="uk-navbar-left">
+    <nav class="uk-navbar-container uk-margin uk-dark" uk-navbar>
+        <div class="uk-navbar-left">
 
-	        <a class="uk-navbar-item uk-logo" href="/">Hamming Encoder</a>
+            <a class="uk-navbar-item uk-logo" href="/">Hamming Encoder</a>
 
-	    </div>
-	    <div class="uk-navbar-right">
+        </div>
+        <div class="uk-navbar-right">
 
-	        <div class="uk-navbar-item">
-	            <div class="uk-navbar-nav">
-	            	{% block navbar %}
-	            	{% endblock %}
-	            </div>
-	        </div>
-	    </div>
-	</nav>
+            <div class="uk-navbar-item">
+                <div class="uk-navbar-nav">
+                    {% block navbar %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </nav>
 
-	<div class="uk-container-small uk-align-center">
-		{% block content %}
-		{% endblock %}
-	</div>
-	{% block bodyjs %}
-	{% endblock %}
+    <div class="uk-container-small uk-align-center">
+        {% block content %}
+        {% endblock %}
+    </div>
+    {% block bodyjs %}
+    {% endblock %}
 
 </body>
 </html>
