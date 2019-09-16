@@ -26,8 +26,7 @@ $ pip3 install -r requirements.txt
 Now that all of the dependencies have been installed, run the application with
 
 ```
-$ cd hamming_app/
-$ python3 flask_app.py
+$ python3 src/app.py
 ```
 
 Enjoy!
