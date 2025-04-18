@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, session, jsonify, current_app
+from flask import Flask, render_template, request, jsonify, current_app
 from collections import namedtuple
 import random
 
-from hammingclasses import HammingEncoder
-from hammingclasses import HammingChecker
-from hammingclasses import add_noise
+from .hammingclasses import HammingChecker, HammingEncoder, add_noise
 
 app = Flask(__name__)
 
