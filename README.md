@@ -1,6 +1,6 @@
 # Hamming Code Web App
 
-An implementation of Hamming codes using Python and NumPy, packaged into a web application with Flask. 
+An implementation of Hamming codes using Python and NumPy, packaged into a web application with Flask.
 
 ![encoder screenshot](images/encoder-screen.png)
 
@@ -8,7 +8,7 @@ This application was written for CS3302 Data Encoding at the University of St An
 
 ## Installation
 
-To run the application locally on your machine, first download it with 
+To run the application locally on your machine, first download it with
 
 ```
 $ git clone https://github.com/ryosukeminami/hamming-code-app.git
@@ -33,11 +33,11 @@ Enjoy!
 
 ## Usage
 
-The user interface should be fairly self explanatory. Type a binary number into the 'binary input' text box and see how Hamming codes handle it. Additionally, you can click the random button to generate a random binary number. 
+The user interface should be fairly self explanatory. Type a binary number into the 'binary input' text box and see how Hamming codes handle it. Additionally, you can click the random button to generate a random binary number.
 
 ![encoder screenshot](images/encoder-screen.png)
 
-The stats window shows how the metrics change with different values of r. As r grows larger, the data ratio improves, but the checkers' ability to correct errors decreases. The user can also test various error rates to see if the test results match up with the expected success rates. 
+The stats window shows how the metrics change with different values of r. As r grows larger, the data ratio improves, but the checkers' ability to correct errors decreases. The user can also test various error rates to see if the test results match up with the expected success rates.
 
 ![stats screenshot](images/stats-screen.png)
 
